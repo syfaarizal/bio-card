@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { profileIdentitySchema, socialLinksSchema, musicSchema } from "@/lib/validations"
 import { fetchSpotifyOEmbed } from "@/lib/spotify"
 import { isReservedSlug } from "@/lib/reserved-slugs"

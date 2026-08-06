@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { ProfileEditor } from "@/features/editor/profile-editor"
@@ -14,7 +14,7 @@ export default async function ProfilePage() {
       links: true,
       music: true,
       images: true,
-      user: { select: { username: true } },
+      user: { select: { username: true, email: true } },
     },
   })
 

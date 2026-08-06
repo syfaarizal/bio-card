@@ -1,6 +1,6 @@
 "use server"
 
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { prisma } from "@/lib/prisma"
 import { registerSchema, loginSchema, forgotPasswordSchema } from "@/lib/validations"
 import { redirect } from "next/navigation"

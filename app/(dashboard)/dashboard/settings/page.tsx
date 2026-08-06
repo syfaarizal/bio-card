@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { deleteAccount } from "@/actions/profile"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 export default function SettingsPage() {

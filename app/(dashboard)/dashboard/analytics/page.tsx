@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { getAnalytics } from "@/actions/analytics"
 import { redirect } from "next/navigation"
 import { BarChart2, Eye, TrendingUp } from "lucide-react"
