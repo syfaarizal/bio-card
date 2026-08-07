@@ -178,9 +178,9 @@ export function ProfilePreview({ profile, deviceMode = "desktop" }: Props) {
                   <p className={cn("text-[10px] uppercase tracking-wider", THEME_MUTED[themeId])}>Birthday</p>
                 </div>
                 <p className="text-base font-bold">
-                  {new Date(profile.birthday).getDate()}{" "}
+                  {new Date(profile.birthday).getUTCDate()}{" "}
                   <span className="text-xs font-normal">
-                    {new Date(profile.birthday).toLocaleString("en-US", { month: "short" })}
+                    {new Date(profile.birthday).toLocaleString("en-US", { month: "short", timeZone: "UTC" })}
                   </span>
                 </p>
               </div>
@@ -276,12 +276,12 @@ export function ProfilePreview({ profile, deviceMode = "desktop" }: Props) {
                   <p className={cn("text-[10px] uppercase tracking-wider", THEME_MUTED[themeId])}>Birthday</p>
                 </div>
                 <p className="text-lg font-bold">
-                  {new Date(profile.birthday).getDate()}{" "}
+                  {new Date(profile.birthday).getUTCDate()}{" "}
                   <span className="text-sm font-normal">
-                    {new Date(profile.birthday).toLocaleString("en-US", { month: "long" })}
+                    {new Date(profile.birthday).toLocaleString("en-US", { month: "long", timeZone: "UTC" })}
                   </span>
                 </p>
-                <p className={cn("text-xs", THEME_MUTED[themeId])}>{new Date(profile.birthday).getFullYear()}</p>
+                <p className={cn("text-xs", THEME_MUTED[themeId])}>{new Date(profile.birthday).getUTCFullYear()}</p>
               </div>
             )}
           </div>
@@ -431,12 +431,12 @@ export function ProfilePreview({ profile, deviceMode = "desktop" }: Props) {
                   <p className={cn("text-[10px] font-medium uppercase tracking-wider", THEME_MUTED[themeId])}>Birthday</p>
                 </div>
                 <p className="text-lg font-bold">
-                  {new Date(profile.birthday).getDate()}{" "}
+                  {new Date(profile.birthday).getUTCDate()}{" "}
                   <span className="text-sm font-normal">
-                    {new Date(profile.birthday).toLocaleString("en-US", { month: "long" })}
+                    {new Date(profile.birthday).toLocaleString("en-US", { month: "long", timeZone: "UTC" })}
                   </span>
                 </p>
-                <p className={cn("text-xs", THEME_MUTED[themeId])}>{new Date(profile.birthday).getFullYear()}</p>
+                <p className={cn("text-xs", THEME_MUTED[themeId])}>{new Date(profile.birthday).getUTCFullYear()}</p>
               </div>
             )}
 

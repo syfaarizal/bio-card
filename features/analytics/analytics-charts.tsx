@@ -16,7 +16,7 @@ export function AnalyticsCharts({ data }: Props) {
     <div className="flex items-end gap-1.5 h-24">
       {data.map(({ date, count }) => {
         const pct = Math.round((count / max) * 100)
-        const label = new Date(date).toLocaleDateString("en-US", { weekday: "short" })
+        const label = new Date(date).toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" })
 
         return (
           <div key={date} className="flex-1 flex flex-col items-center gap-1.5 group">

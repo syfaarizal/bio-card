@@ -206,11 +206,11 @@ export function PublicProfilePage({ profile }: Props) {
                   Birthday
                 </div>
                 <p className="text-2xl font-black leading-none">
-                  {new Date(profile.birthday).getDate()}
+                  {new Date(profile.birthday).getUTCDate()}
                 </p>
                 <p className={cn("text-xs mt-0.5", THEME_MUTED[themeId])}>
-                  {new Date(profile.birthday).toLocaleString("en-US", { month: "long" })}{" "}
-                  {new Date(profile.birthday).getFullYear()}
+                  {new Date(profile.birthday).toLocaleString("en-US", { month: "long", timeZone: "UTC" })}{" "}
+                  {new Date(profile.birthday).getUTCFullYear()}
                 </p>
               </motion.div>
             )}

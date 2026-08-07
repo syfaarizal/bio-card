@@ -10,11 +10,12 @@ export function formatDate(date: Date | string): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   })
 }
 
 export function getActiveSinceYear(date: Date | string): number {
-  return new Date(date).getFullYear()
+  return new Date(date).getUTCFullYear()
 }
 
 export function slugify(text: string): string {
