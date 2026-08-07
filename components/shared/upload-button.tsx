@@ -64,7 +64,13 @@ export function UploadButton({ type, currentUrl, onUploadComplete, onDelete }: U
       {currentUrl ? (
         <div className="relative group w-full">
           <div className="relative w-full h-32 rounded-xl overflow-hidden border border-gray-200">
-            <Image src={currentUrl} alt={type === "MAIN" ? "Main photo" : "Secondary photo"} fill className="object-cover" />
+            <Image
+              src={currentUrl}
+              alt={type === "MAIN" ? "Main photo" : "Secondary photo"}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
             {/* Overlay on hover */}
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
               <label className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-gray-900 text-xs font-medium hover:bg-gray-100 transition-colors">
