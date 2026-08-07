@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import { ProfilePreview } from "@/features/preview/profile-preview"
 import { recordView } from "@/actions/analytics"
+import { PublicProfilePage } from "@/features/public/public-profile-page"
 import type { Metadata } from "next"
 
 interface Props {
@@ -10,34 +10,42 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
+
   const profile = await prisma.profile.findUnique({
     where: { slug, status: "PUBLISHED" },
-    include: { images: true, user: true },
+    include: { images: true },
   })
 
   if (!profile) return { title: "Profile not found" }
 
-  const mainPhoto = profile.images.find((img: { type: string; url: string; id: string }) => img.type === "MAIN")
+  const mainPhoto = profile.images.find(
+    (img: { type: string; url: string }) => img.type === "MAIN"
+  )
+
+  const title = profile.displayName ?? profile.slug
+  const description =
+    profile.bio ?? `Check out ${title}'s BioCard.`
 
   return {
-    title: profile.displayName ?? profile.slug,
-    description: profile.bio ?? `Check out ${profile.displayName ?? profile.slug}'s BioCard.`,
+    title,
+    description,
     openGraph: {
-      title: profile.displayName ?? profile.slug,
-      description: profile.bio ?? `Check out ${profile.displayName ?? profile.slug}'s BioCard.`,
-      images: mainPhoto ? [{ url: mainPhoto.url }] : [],
+      title,
+      description,
+      images: mainPhoto ? [{ url: mainPhoto.url, width: 1200, height: 630, alt: title }] : [],
       type: "profile",
+      siteName: "BioCard",
     },
     twitter: {
       card: "summary_large_image",
-      title: profile.displayName ?? profile.slug,
-      description: profile.bio ?? undefined,
+      title,
+      description,
       images: mainPhoto ? [mainPhoto.url] : [],
     },
   }
 }
 
-export default async function PublicProfilePage({ params }: Props) {
+export default async function Page({ params }: Props) {
   const { slug } = await params
 
   const profile = await prisma.profile.findUnique({
@@ -52,20 +60,8 @@ export default async function PublicProfilePage({ params }: Props) {
 
   if (!profile) notFound()
 
-  // Record view (fire and forget)
+  // Fire and forget — don't block render
   recordView(profile.id).catch(() => {})
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl">
-        <ProfilePreview profile={profile} />
-        <p className="text-center text-xs text-gray-400 mt-4">
-          Made with{" "}
-          <a href="/" className="underline hover:text-gray-600 transition-colors">
-            BioCard
-          </a>
-        </p>
-      </div>
-    </div>
-  )
+  return <PublicProfilePage profile={profile} />
 }

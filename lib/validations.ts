@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { isReservedSlug } from "./reserved-slugs"
+import { normalizeSpotifyTrackUrl } from "./spotify"
 
 const usernameRegex = /^[a-z0-9_-]+$/
 
@@ -61,7 +62,7 @@ export const musicSchema = z.object({
   spotifyUrl: z
     .string()
     .refine(
-      (url) => url === "" || url.includes("open.spotify.com/track/"),
+      (url) => url === "" || normalizeSpotifyTrackUrl(url) !== null,
       "Must be a Spotify track URL (e.g. https://open.spotify.com/track/...)"
     ),
 })
