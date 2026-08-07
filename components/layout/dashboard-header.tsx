@@ -3,7 +3,6 @@
 import { publishProfile, unpublishProfile } from "@/actions/profile"
 import { cn } from "@/lib/utils"
 import { Check, ExternalLink, RefreshCw, Send } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 interface DashboardHeaderProps {
@@ -20,7 +19,6 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 }
 
 export function DashboardHeader({ profile }: DashboardHeaderProps) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [currentStatus, setCurrentStatus] = useState(profile.status)
   const [error, setError] = useState<string | null>(null)
@@ -41,7 +39,6 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
       }
 
       setCurrentStatus(result.status)
-      router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Profile status could not be updated.")
     } finally {
