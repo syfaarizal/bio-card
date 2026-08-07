@@ -150,21 +150,25 @@ export async function deleteImage(type: "MAIN" | "SECONDARY") {
 
 export async function publishProfile() {
   const userId = await getCurrentUserId()
-  await prisma.profile.update({
+  const profile = await prisma.profile.update({
     where: { userId },
     data: { status: "PUBLISHED" as const },
+    select: { slug: true },
   })
   revalidatePath("/dashboard")
+  revalidatePath(`/${profile.slug}`)
   return { success: true }
 }
 
 export async function unpublishProfile() {
   const userId = await getCurrentUserId()
-  await prisma.profile.update({
+  const profile = await prisma.profile.update({
     where: { userId },
     data: { status: "DRAFT" as const },
+    select: { slug: true },
   })
   revalidatePath("/dashboard")
+  revalidatePath(`/${profile.slug}`)
   return { success: true }
 }
 

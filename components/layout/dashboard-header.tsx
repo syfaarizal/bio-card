@@ -3,6 +3,7 @@
 import { publishProfile, unpublishProfile } from "@/actions/profile"
 import { cn } from "@/lib/utils"
 import { ExternalLink, RefreshCw, Send } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 interface DashboardHeaderProps {
@@ -19,6 +20,7 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 }
 
 export function DashboardHeader({ profile }: DashboardHeaderProps) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const status = STATUS_LABELS[profile.status] ?? STATUS_LABELS.DRAFT
 
@@ -29,6 +31,7 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
     } else {
       await publishProfile()
     }
+    router.refresh()
     setLoading(false)
   }
 
