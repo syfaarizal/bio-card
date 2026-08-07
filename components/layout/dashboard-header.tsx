@@ -22,17 +22,29 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 export function DashboardHeader({ profile }: DashboardHeaderProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const status = STATUS_LABELS[profile.status] ?? STATUS_LABELS.DRAFT
+  const [currentStatus, setCurrentStatus] = useState(profile.status)
+  const [error, setError] = useState<string | null>(null)
+
+  const status = STATUS_LABELS[currentStatus] ?? STATUS_LABELS.DRAFT
 
   const handlePublishToggle = async () => {
     setLoading(true)
-    if (profile.status === "PUBLISHED") {
-      await unpublishProfile()
-    } else {
-      await publishProfile()
+    setError(null)
+
+    try {
+      const result = currentStatus === "PUBLISHED"
+        ? await unpublishProfile()
+        : await publishProfile()
+
+      if (!result?.success) throw new Error("Profile status could not be updated.")
+
+      setCurrentStatus(currentStatus === "PUBLISHED" ? "DRAFT" : "PUBLISHED")
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Profile status could not be updated.")
+    } finally {
+      setLoading(false)
     }
-    router.refresh()
-    setLoading(false)
   }
 
   return (
@@ -65,18 +77,19 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
 
         <button
           onClick={handlePublishToggle}
-          disabled={loading || profile.status === "ARCHIVED"}
+          disabled={loading || currentStatus === "ARCHIVED"}
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors disabled:opacity-50",
-            profile.status === "PUBLISHED"
+            currentStatus === "PUBLISHED"
               ? "text-gray-700 border border-gray-200 hover:bg-gray-50"
               : "bg-gray-900 text-white hover:bg-gray-700"
           )}
         >
           <Send className="w-3.5 h-3.5" />
-          {loading ? "…" : profile.status === "PUBLISHED" ? "Unpublish" : "Publish"}
+          {loading ? "Saving..." : currentStatus === "PUBLISHED" ? "Published" : "Publish"}
         </button>
       </div>
+      {error && <p className="absolute top-14 right-6 text-xs text-red-600">{error}</p>}
     </header>
   )
 }
