@@ -2,7 +2,7 @@
 
 import { publishProfile, unpublishProfile } from "@/actions/profile"
 import { cn } from "@/lib/utils"
-import { ExternalLink, RefreshCw, Send } from "lucide-react"
+import { Check, ExternalLink, RefreshCw, Send } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -83,11 +83,15 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors disabled:opacity-50",
             currentStatus === "PUBLISHED"
-              ? "text-gray-700 border border-gray-200 hover:bg-gray-50"
+              ? "bg-green-600 text-white hover:bg-green-700"
               : "bg-gray-900 text-white hover:bg-gray-700"
           )}
         >
-          <Send className="w-3.5 h-3.5" />
+          {currentStatus === "PUBLISHED" ? (
+            <Check className="w-3.5 h-3.5" />
+          ) : (
+            <Send className="w-3.5 h-3.5" />
+          )}
           {loading ? "Saving..." : currentStatus === "PUBLISHED" ? "Published" : "Publish"}
         </button>
       </div>
