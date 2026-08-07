@@ -153,11 +153,11 @@ export async function publishProfile() {
   const profile = await prisma.profile.update({
     where: { userId },
     data: { status: "PUBLISHED" as const },
-    select: { slug: true },
+    select: { slug: true, status: true },
   })
   revalidatePath("/dashboard")
   revalidatePath(`/${profile.slug}`)
-  return { success: true }
+  return { success: true, status: profile.status, slug: profile.slug }
 }
 
 export async function unpublishProfile() {
@@ -165,11 +165,11 @@ export async function unpublishProfile() {
   const profile = await prisma.profile.update({
     where: { userId },
     data: { status: "DRAFT" as const },
-    select: { slug: true },
+    select: { slug: true, status: true },
   })
   revalidatePath("/dashboard")
   revalidatePath(`/${profile.slug}`)
-  return { success: true }
+  return { success: true, status: profile.status, slug: profile.slug }
 }
 
 export async function archiveProfile() {

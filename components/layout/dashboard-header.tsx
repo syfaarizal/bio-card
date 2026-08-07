@@ -36,9 +36,11 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
         ? await unpublishProfile()
         : await publishProfile()
 
-      if (!result?.success) throw new Error("Profile status could not be updated.")
+      if (!result?.success || !result.status) {
+        throw new Error("Profile status could not be updated.")
+      }
 
-      setCurrentStatus(currentStatus === "PUBLISHED" ? "DRAFT" : "PUBLISHED")
+      setCurrentStatus(result.status)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Profile status could not be updated.")
