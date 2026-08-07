@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "**.ufs.sh", // UploadThing file URLs
+      },
+      {
+        protocol: "https",
         hostname: "i.scdn.co", // Spotify album art
       },
       {
