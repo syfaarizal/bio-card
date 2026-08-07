@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "mosaic.scdn.co", // Spotify mosaic art
       },
+      {
+        protocol: "https",
+        hostname: "image-cdn-ak.spotifycdn.com", // Spotify album art CDN
+      },
     ],
   },
   experimental: {
