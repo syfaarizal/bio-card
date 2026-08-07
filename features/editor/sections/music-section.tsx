@@ -6,15 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { musicSchema, type MusicInput } from "@/lib/validations"
 import { saveMusic } from "@/actions/profile"
 import type { FullProfile } from "@/types"
-import { Music2 } from "lucide-react"
 import Image from "next/image"
 
 interface Props {
   profile: FullProfile
-  onUpdate: (updates: Partial<FullProfile>) => void
 }
 
-export function MusicSection({ profile, onUpdate }: Props) {
+export function MusicSection({ profile }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)

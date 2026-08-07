@@ -10,7 +10,7 @@ export async function recordView(profileId: string) {
   const referrer = headersList.get("referer") ?? null
   const userAgent = headersList.get("user-agent") ?? null
 
-  // Anti-spam: check if same IP visited in last 30 minutes
+  // Anti-spam: 30 min cooldown per IP per profile
   const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000)
   const recentView = await prisma.viewLog.findFirst({
     where: {
@@ -20,9 +20,9 @@ export async function recordView(profileId: string) {
     },
   })
 
-  if (recentView) return // already counted
+  if (recentView) return
 
-  // Detect device type (simple heuristic)
+  // Detect device
   let device = "desktop"
   if (userAgent) {
     if (/mobile/i.test(userAgent)) device = "mobile"
@@ -30,12 +30,7 @@ export async function recordView(profileId: string) {
   }
 
   await prisma.viewLog.create({
-    data: {
-      profileId,
-      ip,
-      referrer,
-      device,
-    },
+    data: { profileId, ip, referrer, device },
   })
 }
 
@@ -55,20 +50,55 @@ export async function getAnalytics(userId: string) {
     prisma.viewLog.count({ where: { profileId: profile.id, viewedAt: { gte: monthStart } } }),
     prisma.viewLog.findMany({
       where: { profileId: profile.id },
-      select: { referrer: true },
+      select: { referrer: true, device: true, viewedAt: true },
     }),
   ])
 
-  // Count referrer sources
+  // ── Top referrers ──
   const referrerCounts: Record<string, number> = {}
   for (const view of allViews) {
     const source = parseReferrer(view.referrer)
     referrerCounts[source] = (referrerCounts[source] ?? 0) + 1
   }
-
   const topReferrer = Object.entries(referrerCounts)
     .map(([source, count]) => ({ source, count }))
     .sort((a, b) => b.count - a.count)
 
-  return { total, today, thisWeek, thisMonth, topReferrer }
+  // ── Device breakdown ──
+  const deviceCounts: Record<string, number> = {}
+  for (const view of allViews) {
+    const d = view.device ?? "desktop"
+    deviceCounts[d] = (deviceCounts[d] ?? 0) + 1
+  }
+  const deviceBreakdown = Object.entries(deviceCounts)
+    .map(([device, count]) => ({ device, count }))
+    .sort((a, b) => b.count - a.count)
+
+  // ── Weekly views (last 7 days, one bucket per day) ──
+  const weeklyMap: Record<string, number> = {}
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(d.getDate() - i)
+    const key = d.toISOString().split("T")[0] // "YYYY-MM-DD"
+    weeklyMap[key] = 0
+  }
+  for (const view of allViews) {
+    if (view.viewedAt >= weekStart) {
+      const key = view.viewedAt.toISOString().split("T")[0]
+      if (key in weeklyMap) {
+        weeklyMap[key] = (weeklyMap[key] ?? 0) + 1
+      }
+    }
+  }
+  const weeklyViews = Object.entries(weeklyMap).map(([date, count]) => ({ date, count }))
+
+  return {
+    total,
+    today,
+    thisWeek,
+    thisMonth,
+    topReferrer,
+    deviceBreakdown,
+    weeklyViews,
+  }
 }

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,7 +12,6 @@ model User {
   username  String    @unique
   createdAt DateTime  @default(now())
   deletedAt DateTime?
-
   profile   Profile?
 }
 
@@ -33,18 +29,11 @@ model Profile {
   status       ProfileStatus @default(DRAFT)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-
+  images       Image[]
+  music        Music?
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   links        SocialLinks?
-  music        Music?
-  images       Image[]
   views        ViewLog[]
-}
-
-enum ProfileStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
 }
 
 model SocialLinks {
@@ -54,7 +43,6 @@ model SocialLinks {
   tiktok    String?
   twitter   String?
   youtube   String?
-
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 
@@ -65,7 +53,6 @@ model Music {
   songTitle  String?
   artistName String?
   albumArt   String?
-
   profile    Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 
@@ -74,14 +61,7 @@ model Image {
   profileId String
   type      ImageType
   url       String
-
   profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
-}
-
-enum ImageType {
-  MAIN
-  SECONDARY
-  GALLERY
 }
 
 model ViewLog {
@@ -92,8 +72,19 @@ model ViewLog {
   device    String?
   referrer  String?
   viewedAt  DateTime @default(now())
-
   profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId, ip, viewedAt])
+}
+
+enum ProfileStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ImageType {
+  MAIN
+  SECONDARY
+  GALLERY
 }

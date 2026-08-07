@@ -34,7 +34,7 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
         <ThemeSection profile={liveProfile} onUpdate={updatePreview} />
         <IdentitySection profile={liveProfile} onUpdate={updatePreview} />
         <SocialSection profile={liveProfile} onUpdate={updatePreview} />
-        <MusicSection profile={liveProfile} onUpdate={updatePreview} />
+        <MusicSection profile={liveProfile} />
         <ImagesSection profile={liveProfile} onUpdate={updatePreview} />
       </div>
 

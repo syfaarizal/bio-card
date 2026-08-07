@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { profileIdentitySchema, type ProfileIdentityInput } from "@/lib/validations"
 import { saveProfileIdentity } from "@/actions/profile"
@@ -18,7 +18,7 @@ interface Props {
 export function IdentitySection({ profile, onUpdate }: Props) {
   const birthday = profile.birthday ? new Date(profile.birthday) : null
 
-  const { register, watch, formState: { errors } } = useForm<ProfileIdentityInput>({
+  const { register, control, formState: { errors } } = useForm<ProfileIdentityInput>({
     resolver: zodResolver(profileIdentitySchema),
     defaultValues: {
       displayName: profile.displayName ?? "",
@@ -33,7 +33,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
     },
   })
 
-  const formData = watch()
+  const formData = useWatch<ProfileIdentityInput>({ control }) as ProfileIdentityInput
 
   // Sync preview on every keystroke
   const handleChange = () => {

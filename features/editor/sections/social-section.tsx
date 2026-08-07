@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { socialLinksSchema, type SocialLinksInput } from "@/lib/validations"
 import { saveSocialLinks } from "@/actions/profile"
@@ -22,7 +22,7 @@ const SOCIAL_FIELDS = [
 ]
 
 export function SocialSection({ profile, onUpdate }: Props) {
-  const { register, watch, formState: { errors } } = useForm<SocialLinksInput>({
+  const { register, control, formState: { errors } } = useForm<SocialLinksInput>({
     resolver: zodResolver(socialLinksSchema),
     defaultValues: {
       instagram: profile.links?.instagram ?? "",
@@ -32,7 +32,7 @@ export function SocialSection({ profile, onUpdate }: Props) {
     },
   })
 
-  const formData = watch()
+  const formData = useWatch<SocialLinksInput>({ control }) as SocialLinksInput
 
   const { status } = useAutoSave({
     data: formData,
