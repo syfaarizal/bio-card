@@ -4,6 +4,7 @@ import { publishProfile, unpublishProfile } from "@/actions/profile"
 import { cn } from "@/lib/utils"
 import { Check, ExternalLink, RefreshCw, Send } from "lucide-react"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface DashboardHeaderProps {
   profile: {
@@ -19,6 +20,7 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 }
 
 export function DashboardHeader({ profile }: DashboardHeaderProps) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [currentStatus, setCurrentStatus] = useState(profile.status)
   const [error, setError] = useState<string | null>(null)
@@ -39,6 +41,7 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
       }
 
       setCurrentStatus(result.status)
+      router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Profile status could not be updated.")
     } finally {
@@ -76,7 +79,7 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
 
         <button
           onClick={handlePublishToggle}
-          disabled={loading || currentStatus === "ARCHIVED"}
+          disabled={loading}
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors disabled:opacity-50",
             currentStatus === "PUBLISHED"

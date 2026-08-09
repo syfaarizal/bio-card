@@ -4,6 +4,8 @@ import { recordView } from "@/actions/analytics"
 import { PublicProfilePage } from "@/features/public/public-profile-page"
 import type { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
 interface Props {
   params: Promise<{ slug: string }>
 }
