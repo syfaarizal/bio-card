@@ -90,15 +90,15 @@ export default function SettingsPage() {
       {/* ── Change Password ── */}
       <section className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
         <div>
-          <h2 className="text-sm font-semibold text-gray-900">Change Password</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Must be at least 8 characters.</p>
+          <h2 className="text-sm font-semibold text-gray-900">Change BioCard password</h2>
+          <p className="text-xs text-gray-400 mt-0.5">This password is separate from your email account password.</p>
         </div>
         <form onSubmit={handlePasswordChange} className="space-y-3">
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New password"
+            placeholder="New BioCard password"
             minLength={8}
             required
             className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
@@ -110,7 +110,7 @@ export default function SettingsPage() {
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-xl hover:bg-gray-700 disabled:opacity-50 transition-colors"
           >
             {pwLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-            {pwLoading ? "Updating…" : "Update Password"}
+            {pwLoading ? "Updating…" : "Update BioCard password"}
           </button>
         </form>
       </section>

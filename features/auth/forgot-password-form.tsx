@@ -31,7 +31,7 @@ export function ForgotPasswordForm() {
     return (
       <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-5 text-center">
         <p className="font-medium text-green-800">Reset link sent</p>
-        <p className="mt-1 text-sm text-green-700">Check your email for a link to reset your password.</p>
+        <p className="mt-1 text-sm text-green-700">Check your email for a link to reset your BioCard password.</p>
       </div>
     )
   }

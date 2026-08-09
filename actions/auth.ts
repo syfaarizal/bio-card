@@ -63,7 +63,7 @@ export async function loginAction(input: LoginInput) {
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    return { error: "Invalid email or password." }
+    return { error: "Invalid email or BioCard password." }
   }
 
   redirect("/dashboard")
