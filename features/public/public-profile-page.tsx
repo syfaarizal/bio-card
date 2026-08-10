@@ -28,6 +28,7 @@ function getDeviceMode(width: number): DeviceMode {
 export function PublicProfilePage({ profile }: Props) {
   const themeId = profile.themeId ?? "default"
   const [deviceMode, setDeviceMode] = useState<DeviceMode>("desktop")
+  const isDesktop = deviceMode === "desktop"
 
   useEffect(() => {
     const updateDeviceMode = () => setDeviceMode(getDeviceMode(window.innerWidth))
@@ -38,7 +39,7 @@ export function PublicProfilePage({ profile }: Props) {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${THEME_BG[themeId] ?? THEME_BG.default}`}>
-      <div className="max-w-2xl mx-auto px-4 py-12 md:py-20">
+      <div className={isDesktop ? "w-full h-full px-8 py-8" : "max-w-2xl mx-auto h-full px-4 py-12 md:py-20"}>
         <ProfilePreview profile={profile} deviceMode={deviceMode} />
 
         <div className="mt-6 text-center">
