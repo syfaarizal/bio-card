@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Script from "next/script"
 import { Inter, Geist_Mono } from "next/font/google"
+import { ThemeInitializer } from "@/components/shared/theme-initializer"
 import "@/styles/themes/index.css"
 import "./globals.css"
 
@@ -35,26 +35,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const themeScript = `
-    try {
-      const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-        document.documentElement.classList.add("dark");
-      }
-    } catch {}
-  `
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased`}>
+        <ThemeInitializer />
         {children}
       </body>
-      <Script
-        id="theme-init"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{ __html: themeScript }}
-      />
     </html>
   )
 }
