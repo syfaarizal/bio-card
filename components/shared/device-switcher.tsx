@@ -18,7 +18,7 @@ const DEVICES: { mode: DeviceMode; icon: React.ElementType; label: string }[] = 
 
 export function DeviceSwitcher({ current, onChange }: DeviceSwitcherProps) {
   return (
-    <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+    <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1 dark:bg-zinc-900">
       {DEVICES.map(({ mode, icon: Icon, label }) => (
         <button
           key={mode}
@@ -27,8 +27,8 @@ export function DeviceSwitcher({ current, onChange }: DeviceSwitcherProps) {
           className={cn(
             "flex items-center justify-center w-7 h-7 rounded-md transition-all",
             current === mode
-              ? "bg-white text-gray-900 shadow-sm"
-              : "text-gray-400 hover:text-gray-600"
+              ? "bg-white text-gray-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-50"
+              : "text-gray-400 hover:text-gray-600 dark:text-zinc-500 dark:hover:text-zinc-300"
           )}
         >
           <Icon className="w-3.5 h-3.5" />

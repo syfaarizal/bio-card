@@ -18,15 +18,15 @@ export default async function AnalyticsPage() {
     return (
       <div className="max-w-2xl">
         <div className="mb-6">
-          <h1 className="text-lg font-semibold text-gray-900">Analytics</h1>
-          <p className="text-sm text-gray-500">Track who&apos;s visiting your BioCard.</p>
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-zinc-50">Analytics</h1>
+          <p className="text-sm text-gray-500 dark:text-zinc-400">Track who&apos;s visiting your BioCard.</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-12 flex flex-col items-center justify-center text-center">
-          <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-            <BarChart2 className="w-6 h-6 text-gray-300" />
+        <div className="bg-white rounded-2xl border border-gray-200 p-12 flex flex-col items-center justify-center text-center transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mb-4 dark:bg-zinc-900">
+            <BarChart2 className="w-6 h-6 text-gray-300 dark:text-zinc-600" />
           </div>
-          <p className="text-sm font-medium text-gray-700">No data yet</p>
-          <p className="text-xs text-gray-400 mt-1 max-w-xs">
+          <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">No data yet</p>
+          <p className="text-xs text-gray-400 mt-1 max-w-xs dark:text-zinc-500">
             Share your profile link to start tracking views. Data appears here within minutes.
           </p>
         </div>
@@ -68,24 +68,24 @@ export default async function AnalyticsPage() {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-gray-900">Analytics</h1>
-        <p className="text-sm text-gray-500">Track who&apos;s visiting your BioCard.</p>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-zinc-50">Analytics</h1>
+        <p className="text-sm text-gray-500 dark:text-zinc-400">Track who&apos;s visiting your BioCard.</p>
       </div>
 
       {/* ── Stats grid ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {stats.map(({ label, value, icon: Icon, desc }) => (
-          <div key={label} className="bg-white rounded-2xl border border-gray-200 p-4">
+          <div key={label} className="bg-white rounded-2xl border border-gray-200 p-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-xs text-gray-500 font-medium">{label}</p>
-              <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
-                <Icon className="w-3.5 h-3.5 text-gray-400" />
+              <p className="text-xs text-gray-500 font-medium dark:text-zinc-400">{label}</p>
+              <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center dark:bg-zinc-900">
+                <Icon className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-500" />
               </div>
             </div>
-            <p className="text-2xl font-black text-gray-900 leading-none">
+            <p className="text-2xl font-black text-gray-900 leading-none dark:text-zinc-50">
               {value.toLocaleString()}
             </p>
-            <p className="text-[11px] text-gray-400 mt-1">{desc}</p>
+            <p className="text-[11px] text-gray-400 mt-1 dark:text-zinc-500">{desc}</p>
           </div>
         ))}
       </div>
@@ -94,10 +94,10 @@ export default async function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* Top Referrers */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-4">Top Referrers</h2>
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+          <h2 className="text-sm font-semibold text-gray-900 mb-4 dark:text-zinc-50">Top Referrers</h2>
           {referrerData.length === 0 ? (
-            <p className="text-sm text-gray-400 italic text-center py-4">No referrer data yet.</p>
+            <p className="text-sm text-gray-400 italic text-center py-4 dark:text-zinc-500">No referrer data yet.</p>
           ) : (
             <div className="space-y-3">
               {referrerData.map(({ source, count }) => {
@@ -107,17 +107,17 @@ export default async function AnalyticsPage() {
                 return (
                   <div key={source}>
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-sm text-gray-700 font-medium">{source}</span>
+                      <span className="text-sm text-gray-700 font-medium dark:text-zinc-300">{source}</span>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs text-gray-400">{pct}%</span>
-                        <span className="text-sm font-semibold text-gray-900">
+                        <span className="text-xs text-gray-400 dark:text-zinc-500">{pct}%</span>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-zinc-50">
                           {count.toLocaleString()}
                         </span>
                       </div>
                     </div>
-                    <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden dark:bg-zinc-900">
                       <div
-                        className="h-full bg-gray-900 rounded-full transition-all duration-700"
+                        className="h-full bg-gray-900 rounded-full transition-all duration-700 dark:bg-zinc-200"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -129,10 +129,10 @@ export default async function AnalyticsPage() {
         </div>
 
         {/* Device Breakdown */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-4">Devices</h2>
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+          <h2 className="text-sm font-semibold text-gray-900 mb-4 dark:text-zinc-50">Devices</h2>
           {deviceData.length === 0 ? (
-            <p className="text-sm text-gray-400 italic text-center py-4">No device data yet.</p>
+            <p className="text-sm text-gray-400 italic text-center py-4 dark:text-zinc-500">No device data yet.</p>
           ) : (
             <div className="space-y-3">
               {deviceData.map(({ device, count }: { device: string; count: number }) => {
@@ -144,19 +144,19 @@ export default async function AnalyticsPage() {
                   <div key={device}>
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2">
-                        <Icon className="w-3.5 h-3.5 text-gray-400" />
-                        <span className="text-sm text-gray-700 font-medium capitalize">{device}</span>
+                        <Icon className="w-3.5 h-3.5 text-gray-400 dark:text-zinc-500" />
+                        <span className="text-sm text-gray-700 font-medium capitalize dark:text-zinc-300">{device}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs text-gray-400">{pct}%</span>
-                        <span className="text-sm font-semibold text-gray-900">
+                        <span className="text-xs text-gray-400 dark:text-zinc-500">{pct}%</span>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-zinc-50">
                           {count.toLocaleString()}
                         </span>
                       </div>
                     </div>
-                    <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden dark:bg-zinc-900">
                       <div
-                        className="h-full bg-gray-900 rounded-full transition-all duration-700"
+                        className="h-full bg-gray-900 rounded-full transition-all duration-700 dark:bg-zinc-200"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -170,8 +170,8 @@ export default async function AnalyticsPage() {
 
       {/* ── Weekly chart ── */}
       {analytics.weeklyViews && analytics.weeklyViews.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-4">Views — Last 7 Days</h2>
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+          <h2 className="text-sm font-semibold text-gray-900 mb-4 dark:text-zinc-50">Views — Last 7 Days</h2>
           <AnalyticsCharts data={analytics.weeklyViews} />
         </div>
       )}

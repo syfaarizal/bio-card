@@ -34,14 +34,14 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
   }
 
   return (
-    <aside className="w-60 flex-shrink-0 border-r border-gray-200 bg-white flex flex-col">
+    <aside className="w-60 flex-shrink-0 border-r border-gray-200 bg-white flex flex-col transition-colors dark:border-zinc-800 dark:bg-zinc-950">
       {/* Logo */}
-      <div className="h-14 flex items-center px-4 border-b border-gray-200">
+      <div className="h-14 flex items-center px-4 border-b border-gray-200 dark:border-zinc-800">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center">
-            <span className="text-white text-xs font-bold">B</span>
+          <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center dark:bg-white">
+            <span className="text-white text-xs font-bold dark:text-zinc-950">B</span>
           </div>
-          <span className="font-semibold text-gray-900">BioCard</span>
+          <span className="font-semibold text-gray-900 dark:text-zinc-50">BioCard</span>
         </Link>
       </div>
 
@@ -54,8 +54,8 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
           className={cn(
             "w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-colors",
             isEditorActive
-              ? "bg-gray-100 text-gray-900"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              ? "bg-gray-100 text-gray-900 dark:bg-zinc-900 dark:text-zinc-50"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
           )}
         >
           <span>Edit Profile</span>
@@ -73,7 +73,7 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
               <Link
                 key={href}
                 href={href}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors dark:text-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
               >
                 <Icon className="w-3.5 h-3.5 flex-shrink-0" />
                 {label}
@@ -88,8 +88,8 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
           className={cn(
             "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors",
             pathname === "/dashboard/analytics"
-              ? "bg-gray-100 text-gray-900"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              ? "bg-gray-100 text-gray-900 dark:bg-zinc-900 dark:text-zinc-50"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
           )}
         >
           <BarChart2 className="w-4 h-4" />
@@ -102,8 +102,8 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
           className={cn(
             "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors",
             pathname === "/dashboard/settings"
-              ? "bg-gray-100 text-gray-900"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              ? "bg-gray-100 text-gray-900 dark:bg-zinc-900 dark:text-zinc-50"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
           )}
         >
           <Settings className="w-4 h-4" />
@@ -112,13 +112,13 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
       </nav>
 
       {/* Bottom */}
-      <div className="p-3 border-t border-gray-200 space-y-2">
+      <div className="p-3 border-t border-gray-200 space-y-2 dark:border-zinc-800">
 
         {/* Profile status + public link */}
-        <div className={cn("rounded-xl border px-3 py-2.5", "border-gray-100 bg-gray-50")}>
+        <div className={cn("rounded-xl border px-3 py-2.5", "border-gray-100 bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900/70")}>
           <div className="flex items-center gap-2 mb-1">
             <div className={cn("w-1.5 h-1.5 rounded-full", STATUS_DOT[profileStatus] ?? "bg-gray-300")} />
-            <p className="text-xs font-medium text-gray-700">
+            <p className="text-xs font-medium text-gray-700 dark:text-zinc-300">
               {profileStatus === "PUBLISHED" ? "Live" : profileStatus === "DRAFT" ? "Draft" : "Archived"}
             </p>
           </div>
@@ -127,7 +127,7 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
               href={`/${slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[11px] text-gray-400 hover:text-gray-700 transition-colors truncate block"
+              className="text-[11px] text-gray-400 hover:text-gray-700 transition-colors truncate block dark:text-zinc-500 dark:hover:text-zinc-200"
             >
               biocard.app/{slug} ↗
             </a>
@@ -135,24 +135,24 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
         </div>
 
         {/* Upgrade placeholder */}
-        <div className="rounded-xl border border-dashed border-gray-200 px-3 py-2.5 opacity-40 cursor-not-allowed select-none">
+        <div className="rounded-xl border border-dashed border-gray-200 px-3 py-2.5 opacity-40 cursor-not-allowed select-none dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <Crown className="w-4 h-4 text-amber-500 flex-shrink-0" />
             <div>
-              <p className="text-xs font-medium text-gray-900">Upgrade to Pro</p>
-              <p className="text-[10px] text-gray-400">Coming soon</p>
+              <p className="text-xs font-medium text-gray-900 dark:text-zinc-100">Upgrade to Pro</p>
+              <p className="text-[10px] text-gray-400 dark:text-zinc-500">Coming soon</p>
             </div>
           </div>
         </div>
 
         {/* User + logout */}
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs text-gray-400 truncate">@{username}</span>
+          <span className="text-xs text-gray-400 truncate dark:text-zinc-500">@{username}</span>
           <form action={logoutAction}>
             <button
               type="submit"
               title="Log out"
-              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors dark:text-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
             >
               <LogOut className="w-4 h-4" />
             </button>

@@ -13,9 +13,9 @@ export function SaveStatus({ status }: SaveStatusProps) {
   return (
     <div className={cn(
       "flex items-center gap-1 text-xs transition-all",
-      status === "saving" && "text-gray-400",
-      status === "saved" && "text-green-600",
-      status === "error" && "text-red-600",
+      status === "saving" && "text-gray-400 dark:text-zinc-500",
+      status === "saved" && "text-green-600 dark:text-green-400",
+      status === "error" && "text-red-600 dark:text-red-400",
     )}>
       {status === "saving" && <Loader2 className="w-3 h-3 animate-spin" />}
       {status === "saved" && <Check className="w-3 h-3" />}

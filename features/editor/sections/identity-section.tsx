@@ -55,78 +55,78 @@ export function IdentitySection({ profile, onUpdate }: Props) {
   })
 
   return (
-    <section id="identity" className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+    <section id="identity" className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-900">Identity</h2>
+        <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Identity</h2>
         <SaveStatus status={status} />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Username</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Username</label>
         <input
           value={profile.user.username}
           readOnly
-          className="w-full rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm text-gray-400 cursor-not-allowed"
+          className="w-full rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm text-gray-400 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-500"
         />
-        <p className="mt-1 text-xs text-gray-400">Username cannot be changed.</p>
+        <p className="mt-1 text-xs text-gray-400 dark:text-zinc-500">Username cannot be changed.</p>
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Display Name</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Display Name</label>
         <input
           {...register("displayName")}
           onChange={(e) => { register("displayName").onChange(e); handleChange() }}
           placeholder="Kai Shi"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
-        {errors.displayName && <p className="mt-1 text-xs text-red-600">{errors.displayName.message}</p>}
+        {errors.displayName && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.displayName.message}</p>}
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">
-          Profile URL <span className="text-gray-400 font-normal">biocard.app/</span>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">
+          Profile URL <span className="text-gray-400 font-normal dark:text-zinc-500">biocard.app/</span>
         </label>
         <input
           {...register("slug")}
           onChange={(e) => { register("slug").onChange(e); handleChange() }}
           placeholder="yourname"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
-        {errors.slug && <p className="mt-1 text-xs text-red-600">{errors.slug.message}</p>}
+        {errors.slug && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.slug.message}</p>}
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Bio / Role</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Bio / Role</label>
         <input
           {...register("bio")}
           onChange={(e) => { register("bio").onChange(e); handleChange() }}
           placeholder="Coder, Creator, Developer"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
-        {errors.bio && <p className="mt-1 text-xs text-red-600">{errors.bio.message}</p>}
+        {errors.bio && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.bio.message}</p>}
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Location</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Location</label>
         <input
           {...register("location")}
           onChange={(e) => { register("location").onChange(e); handleChange() }}
           placeholder="Jawa Barat, Indonesia"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Birthday</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Birthday</label>
         <div className="grid grid-cols-3 gap-2">
           <input
             {...register("birthdayDay")}
             placeholder="Day"
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           />
           <select
             {...register("birthdayMonth")}
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors bg-white"
+            className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           >
             <option value="">Month</option>
             {MONTHS.map((m, i) => (
@@ -136,21 +136,21 @@ export function IdentitySection({ profile, onUpdate }: Props) {
           <input
             {...register("birthdayYear")}
             placeholder="Year"
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Tags</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Tags</label>
         <input
           {...register("tags")}
           onChange={(e) => { register("tags").onChange(e); handleChange() }}
           placeholder="Developer, Anime, Creator"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
-        <p className="mt-1 text-xs text-gray-400">Separate with commas. Max 5 tags.</p>
-        {errors.tags && <p className="mt-1 text-xs text-red-600">{errors.tags.message}</p>}
+        <p className="mt-1 text-xs text-gray-400 dark:text-zinc-500">Separate with commas. Max 5 tags.</p>
+        {errors.tags && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.tags.message}</p>}
       </div>
     </section>
   )

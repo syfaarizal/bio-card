@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!profile) redirect("/login")
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-gray-50 text-gray-900 transition-colors dark:bg-zinc-950 dark:text-zinc-100">
       <DashboardSidebar
         username={profile.user.username}
         profileStatus={profile.status}

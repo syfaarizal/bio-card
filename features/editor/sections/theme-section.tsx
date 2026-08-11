@@ -43,8 +43,8 @@ export function ThemeSection({ profile, onUpdate }: Props) {
   }
 
   return (
-    <section id="theme" className="bg-white rounded-xl border border-gray-200 p-5">
-      <h2 className="text-sm font-semibold text-gray-900 mb-4">Theme Color</h2>
+    <section id="theme" className="bg-white rounded-xl border border-gray-200 p-5 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+      <h2 className="text-sm font-semibold text-gray-900 mb-4 dark:text-zinc-50">Theme Color</h2>
       <div className="flex gap-3">
         {THEMES.map((theme) => (
           <button
@@ -54,8 +54,8 @@ export function ThemeSection({ profile, onUpdate }: Props) {
             className={cn(
               "w-9 h-9 rounded-full border-2 transition-all",
               profile.themeId === theme.id
-                ? "border-gray-900 scale-110"
-                : "border-gray-200 hover:border-gray-400"
+                ? "border-gray-900 scale-110 dark:border-zinc-100"
+                : "border-gray-200 hover:border-gray-400 dark:border-zinc-700 dark:hover:border-zinc-500"
             )}
             style={{ backgroundColor: THEME_COLORS[theme.id] }}
           >

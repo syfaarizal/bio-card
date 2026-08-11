@@ -28,11 +28,11 @@ export function ImagesSection({ profile, onUpdate }: Props) {
   }
 
   return (
-    <section id="images" className="bg-white rounded-xl border border-gray-200 p-5 space-y-5">
-      <h2 className="text-sm font-semibold text-gray-900">Images</h2>
+    <section id="images" className="bg-white rounded-xl border border-gray-200 p-5 space-y-5 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+      <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Images</h2>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-2">Main Photo</label>
+        <label className="block text-xs font-medium text-gray-600 mb-2 dark:text-zinc-400">Main Photo</label>
         <UploadButton
           type="MAIN"
           currentUrl={mainPhoto?.url}
@@ -42,7 +42,7 @@ export function ImagesSection({ profile, onUpdate }: Props) {
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-2">Secondary Photo</label>
+        <label className="block text-xs font-medium text-gray-600 mb-2 dark:text-zinc-400">Secondary Photo</label>
         <UploadButton
           type="SECONDARY"
           currentUrl={secondaryPhoto?.url}

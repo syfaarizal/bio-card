@@ -22,12 +22,12 @@ export function AnalyticsCharts({ data }: Props) {
           <div key={date} className="flex-1 flex flex-col items-center gap-1.5 group">
             <div className="w-full flex items-end justify-center h-16">
               <div
-                className="w-full rounded-t-md bg-gray-900 transition-all duration-500 group-hover:bg-gray-600 min-h-[2px]"
+                className="w-full rounded-t-md bg-gray-900 transition-all duration-500 group-hover:bg-gray-600 min-h-[2px] dark:bg-zinc-200 dark:group-hover:bg-zinc-400"
                 style={{ height: `${Math.max(pct, 2)}%` }}
                 title={`${count} view${count !== 1 ? "s" : ""}`}
               />
             </div>
-            <span className="text-[10px] text-gray-400">{label}</span>
+            <span className="text-[10px] text-gray-400 dark:text-zinc-500">{label}</span>
           </div>
         )
       })}
