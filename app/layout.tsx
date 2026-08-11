@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import { Inter, Geist_Mono } from "next/font/google"
 import "@/styles/themes/index.css"
 import "./globals.css"
@@ -46,8 +47,12 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <Script
+        id="theme-init"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: themeScript }}
+      />
       <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased`}>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {children}
       </body>
     </html>

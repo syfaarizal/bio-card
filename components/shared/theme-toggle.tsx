@@ -1,16 +1,19 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { Moon, Sun } from "lucide-react"
 
 type Theme = "light" | "dark"
 
+const THEME_CHANGE_EVENT = "biocard-theme-change"
+
 function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark")
   localStorage.setItem("theme", theme)
+  window.dispatchEvent(new Event(THEME_CHANGE_EVENT))
 }
 
-function getInitialTheme(): Theme {
+function getThemeSnapshot(): Theme {
   if (typeof window === "undefined") return "light"
 
   const savedTheme = localStorage.getItem("theme")
@@ -19,16 +22,22 @@ function getInitialTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme)
+function subscribeToThemeChange(callback: () => void) {
+  window.addEventListener(THEME_CHANGE_EVENT, callback)
+  window.addEventListener("storage", callback)
 
-  useEffect(() => {
-    applyTheme(theme)
-  }, [theme])
+  return () => {
+    window.removeEventListener(THEME_CHANGE_EVENT, callback)
+    window.removeEventListener("storage", callback)
+  }
+}
+
+export function ThemeToggle() {
+  const theme = useSyncExternalStore(subscribeToThemeChange, getThemeSnapshot, () => "light")
 
   const toggleTheme = () => {
     const nextTheme = theme === "dark" ? "light" : "dark"
-    setTheme(nextTheme)
+    applyTheme(nextTheme)
   }
 
   return (
