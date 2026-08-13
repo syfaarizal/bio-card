@@ -2,90 +2,41 @@
 
 > One link. Your whole identity.
 
-A platform for developers, creators, and online communities to build beautiful, personalized profile pages.
+A modern platform for building personalized profile pages with live preview and customizable themes.
 
-## Tech Stack
+## Stack
 
-| Layer | Tech |
-|-------|------|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| UI | shadcn/ui + Radix UI |
-| Animation | Motion (Framer Motion) |
-| Auth | Supabase Auth |
-| Database | PostgreSQL via Supabase |
-| ORM | Prisma |
-| Validation | Zod + React Hook Form |
-| File Upload | UploadThing |
-| Deployment | Vercel |
+- **Framework:** Next.js 15 with App Router
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **UI Components:** shadcn/ui + Radix UI
+- **Animation:** Framer Motion
+- **Authentication:** Supabase Auth
+- **Database:** PostgreSQL (Supabase)
+- **ORM:** Prisma
+- **Validation:** Zod + React Hook Form
+- **File Storage:** UploadThing
+- **Hosting:** Vercel
 
-## Getting Started
+## Architecture
 
-### 1. Clone and install
-
-```bash
-git clone <repo-url>
-cd biocard
-npm install
-```
-
-### 2. Set up environment variables
-
-```bash
-cp .env.example .env.local
-```
-
-On Windows PowerShell, use `Copy-Item .env.example .env.local` instead.
-
-Fill in your values:
-- `DATABASE_URL` — from Supabase project settings > Database
-- `DIRECT_URL` — same as DATABASE_URL for migrations
-- `NEXT_PUBLIC_SUPABASE_URL` — from Supabase project settings > API
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — from Supabase project settings > API
-- `UPLOADTHING_SECRET` — from UploadThing dashboard
-- `UPLOADTHING_APP_ID` — from UploadThing dashboard
-
-### 3. Run database migrations
-
-```bash
-npx prisma migrate dev --name init
-```
-
-### 4. Start development server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-## Project Structure
+This project follows a feature-based structure with clear separation of concerns:
 
 ```
-biocard/
-├── app/               # Next.js App Router pages
-├── components/        # Reusable UI components
-├── features/          # Feature modules (auth, editor, preview, analytics)
-├── lib/               # Utility functions, clients (Supabase, Prisma)
-├── hooks/             # Custom React hooks
-├── types/             # TypeScript types
-├── actions/           # Next.js Server Actions
-├── styles/themes/     # CSS theme variables
-├── prisma/            # Database schema + migrations
-├── public/            # Static assets
-└── docs/adr/          # Architecture Decision Records
+app/                  # Routes and pages (Next.js App Router)
+components/           # Shared UI components and layouts
+features/             # Feature modules (auth, editor, preview, analytics)
+lib/                  # Utilities, clients, and helpers
+hooks/                # Custom React hooks
+types/                # TypeScript type definitions
+actions/              # Next.js Server Actions
+styles/themes/        # Theme configurations
+prisma/               # Database schema and migrations
+docs/adr/             # Architecture Decision Records
 ```
 
-## Sprint Plan
+For design rationale and technical decisions, see [Architecture Decision Records](./docs/adr/).
 
-| Sprint | Focus | Status |
-|--------|-------|--------|
-| Sprint 1 | Foundation (auth, DB, setup) | ✅ In progress |
-| Sprint 2 | Core editor + live preview | 🔲 |
-| Sprint 3 | Public profile + SEO | 🔲 |
-| Sprint 4 | Analytics + polish | 🔲 |
+## Development
 
-## Architecture Decisions
-
-See [`docs/adr/`](./docs/adr/) for why each major decision was made.
+Refer to `package.json` for available commands and setup requirements.
