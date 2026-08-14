@@ -1,11 +1,11 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { profileIdentitySchema, socialLinksSchema, musicSchema } from "@/lib/validations"
 import { fetchSpotifyOEmbed } from "@/lib/spotify"
 import { isReservedSlug } from "@/lib/reserved-slugs"
 import { revalidatePath } from "next/cache"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { ProfileIdentityInput, SocialLinksInput, MusicInput } from "@/lib/validations"
 
 async function getCurrentUserId(): Promise<string> {
@@ -150,26 +150,22 @@ export async function deleteImage(type: "MAIN" | "SECONDARY") {
 
 export async function publishProfile() {
   const userId = await getCurrentUserId()
-  const profile = await prisma.profile.update({
+  await prisma.profile.update({
     where: { userId },
     data: { status: "PUBLISHED" as const },
-    select: { slug: true, status: true },
   })
   revalidatePath("/dashboard")
-  revalidatePath(`/${profile.slug}`)
-  return { success: true, status: profile.status, slug: profile.slug }
+  return { success: true, status: "PUBLISHED" }
 }
 
 export async function unpublishProfile() {
   const userId = await getCurrentUserId()
-  const profile = await prisma.profile.update({
+  await prisma.profile.update({
     where: { userId },
     data: { status: "DRAFT" as const },
-    select: { slug: true, status: true },
   })
   revalidatePath("/dashboard")
-  revalidatePath(`/${profile.slug}`)
-  return { success: true, status: profile.status, slug: profile.slug }
+  return { success: true, status: "DRAFT" }
 }
 
 export async function archiveProfile() {
