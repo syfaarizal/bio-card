@@ -127,7 +127,7 @@ export function PublicProfilePage({ profile }: Props) {
           <div className="relative px-6">
             <motion.div variants={scaleIn}
               transition={{ type: "spring", stiffness: 280, damping: 22 }}
-              className="absolute -top-14 left-6">
+              className="absolute -top-14 left-1/2 -translate-x-1/2">
               {/* Relative container for decoration overlay */}
               <div className="relative w-[104px] h-[104px]">
                 {/* Glow ring */}
@@ -153,7 +153,7 @@ export function PublicProfilePage({ profile }: Props) {
                 <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-green-500 border-2 border-white shadow-lg z-10" />
               </div>
             </motion.div>
-            <div className="h-16" />
+            <div className="h-14" />
           </div>
 
           {/* ── IDENTITY ── */}

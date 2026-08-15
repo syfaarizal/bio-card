@@ -102,8 +102,8 @@ function ProfileCard({ profile, compact = false }: { profile: FullProfile; compa
 
   const bannerH    = compact ? "h-24" : "h-32"
   const avatarSize = compact ? 72 : 88
-  const avatarTop  = compact ? "-top-9 left-4" : "-top-12 left-5"
-  const spacerH    = compact ? "h-8" : "h-12"
+  const avatarTop  = compact ? "-top-9 left-1/2 -translate-x-1/2" : "-top-12 left-1/2 -translate-x-1/2"
+  const spacerH    = compact ? "h-11" : "h-12"
   const nameSize   = compact ? "text-xl" : "text-2xl"
   const px         = compact ? "px-4" : "px-5"
 
