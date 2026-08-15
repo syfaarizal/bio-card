@@ -1,3 +1,6 @@
+// BioCard — Prisma Schema
+// Run after applying patch: npx prisma migrate dev --name v2-avatar-decoration-image-types
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,28 +15,38 @@ model User {
   username  String    @unique
   createdAt DateTime  @default(now())
   deletedAt DateTime?
+
   profile   Profile?
 }
 
 model Profile {
-  id           String        @id @default(cuid())
-  userId       String        @unique
-  slug         String        @unique
-  displayName  String?
-  bio          String?
-  location     String?
-  birthday     DateTime?
-  tags         String[]
-  themeId      String        @default("default")
-  themeVersion Int           @default(1)
-  status       ProfileStatus @default(DRAFT)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  images       Image[]
-  music        Music?
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  links        SocialLinks?
-  views        ViewLog[]
+  id             String        @id @default(cuid())
+  userId         String        @unique
+  slug           String        @unique
+  displayName    String?
+  bio            String?
+  location       String?
+  birthday       DateTime?
+  tags           String[]
+  themeId        String        @default("default")
+  themeVersion   Int           @default(1)
+  profileEffect  String?       // null | "sakura" | "cyber" | "angel"
+  verifiedBadge  Boolean       @default(false) // pro-only placeholder
+  status         ProfileStatus @default(DRAFT)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  links          SocialLinks?
+  music          Music?
+  images         Image[]
+  views          ViewLog[]
+}
+
+enum ProfileStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 model SocialLinks {
@@ -43,6 +56,7 @@ model SocialLinks {
   tiktok    String?
   twitter   String?
   youtube   String?
+
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 
@@ -53,6 +67,7 @@ model Music {
   songTitle  String?
   artistName String?
   albumArt   String?
+
   profile    Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 
@@ -61,7 +76,16 @@ model Image {
   profileId String
   type      ImageType
   url       String
+
   profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+enum ImageType {
+  PROFILE    // avatar / profile photo
+  BANNER     // landscape banner behind avatar
+  GALLERY_1  // post slot 1
+  GALLERY_2  // post slot 2
+  GALLERY_3  // post slot 3
 }
 
 model ViewLog {
@@ -72,19 +96,8 @@ model ViewLog {
   device    String?
   referrer  String?
   viewedAt  DateTime @default(now())
+
   profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId, ip, viewedAt])
-}
-
-enum ProfileStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
-}
-
-enum ImageType {
-  MAIN
-  SECONDARY
-  GALLERY
 }

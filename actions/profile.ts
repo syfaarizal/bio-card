@@ -1,11 +1,11 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { profileIdentitySchema, socialLinksSchema, musicSchema } from "@/lib/validations"
 import { fetchSpotifyOEmbed } from "@/lib/spotify"
 import { isReservedSlug } from "@/lib/reserved-slugs"
 import { revalidatePath } from "next/cache"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { ProfileIdentityInput, SocialLinksInput, MusicInput } from "@/lib/validations"
 
 async function getCurrentUserId(): Promise<string> {
@@ -113,35 +113,41 @@ export async function saveMusic(input: MusicInput) {
   return { success: true }
 }
 
-// ─── NEW in Sprint 2 ──────────────────────────────────────────────────────────
+// ─── Image actions (v2 — 5 slots) ────────────────────────────────────────────
 
-export async function saveImage(type: "MAIN" | "SECONDARY", url: string) {
+type ImageSlotType = "PROFILE" | "BANNER" | "GALLERY_1" | "GALLERY_2" | "GALLERY_3"
+
+export async function saveImage(type: ImageSlotType, url: string) {
   const userId = await getCurrentUserId()
   const profile = await prisma.profile.findUnique({ where: { userId } })
   if (!profile) return { error: "Profile not found." }
 
-  // Delete existing image of this type before inserting new one
-  await prisma.image.deleteMany({
-    where: { profileId: profile.id, type },
-  })
-
-  await prisma.image.create({
-    data: { profileId: profile.id, type, url },
-  })
+  await prisma.image.deleteMany({ where: { profileId: profile.id, type } })
+  await prisma.image.create({ data: { profileId: profile.id, type, url } })
 
   revalidatePath("/dashboard/profile")
   return { success: true }
 }
 
-export async function deleteImage(type: "MAIN" | "SECONDARY") {
+export async function deleteImage(type: ImageSlotType) {
   const userId = await getCurrentUserId()
   const profile = await prisma.profile.findUnique({ where: { userId } })
   if (!profile) return { error: "Profile not found." }
 
-  await prisma.image.deleteMany({
-    where: { profileId: profile.id, type },
-  })
+  await prisma.image.deleteMany({ where: { profileId: profile.id, type } })
 
+  revalidatePath("/dashboard/profile")
+  return { success: true }
+}
+
+// ─── Avatar decoration ────────────────────────────────────────────────────────
+
+export async function saveProfileDecoration(effect: string | null) {
+  const userId = await getCurrentUserId()
+  await prisma.profile.update({
+    where: { userId },
+    data: { profileEffect: effect },
+  })
   revalidatePath("/dashboard/profile")
   return { success: true }
 }

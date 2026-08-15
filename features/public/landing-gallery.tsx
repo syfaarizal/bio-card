@@ -61,7 +61,7 @@ export function LandingGallery({ profiles }: Props) {
     >
       {profiles.map((profile) => {
         const themeId = profile.themeId ?? "default"
-        const mainPhoto = profile.images.find((img) => img.type === "MAIN")
+        const mainPhoto = profile.images.find((img) => img.type === "PROFILE")
 
         return (
           <motion.div key={profile.slug} variants={fadeUp} transition={{ duration: 0.4, ease: "easeOut" }}>

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!profile) return { title: "Profile not found" }
 
   const mainPhoto = profile.images.find(
-    (img: { type: string; url: string }) => img.type === "MAIN"
+    (img: { type: string; url: string }) => img.type === "PROFILE"
   )
 
   const title = profile.displayName ?? profile.slug

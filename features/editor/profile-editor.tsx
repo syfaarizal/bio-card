@@ -7,6 +7,7 @@ import { SocialSection } from "./sections/social-section"
 import { MusicSection } from "./sections/music-section"
 import { ImagesSection } from "./sections/images-section"
 import { ThemeSection } from "./sections/theme-section"
+import { DecorationSection } from "./sections/decoration-section"
 import { ProfilePreview } from "@/features/preview/profile-preview"
 import { DeviceSwitcher, type DeviceMode } from "@/components/shared/device-switcher"
 
@@ -32,15 +33,15 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
         </div>
 
         <ThemeSection profile={liveProfile} onUpdate={updatePreview} />
+        <DecorationSection profile={liveProfile} onUpdate={updatePreview} />
+        <ImagesSection profile={liveProfile} onUpdate={updatePreview} />
         <IdentitySection profile={liveProfile} onUpdate={updatePreview} />
         <SocialSection profile={liveProfile} onUpdate={updatePreview} />
         <MusicSection profile={liveProfile} />
-        <ImagesSection profile={liveProfile} onUpdate={updatePreview} />
       </div>
 
       {/* ── Live Preview Panel ── */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Preview header */}
         <div className="flex items-center justify-between mb-3 flex-shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -49,17 +50,14 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
           <DeviceSwitcher current={deviceMode} onChange={setDeviceMode} />
         </div>
 
-        {/* Preview container — constrains width based on device mode */}
-        <div className="flex-1 bg-gray-100 rounded-xl overflow-auto flex items-start justify-center p-4 transition-colors dark:bg-zinc-900">
+        <div className="flex-1 bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-auto flex items-start justify-center p-4">
           <div
             className="transition-all duration-300 w-full"
             style={{
               maxWidth:
-                deviceMode === "mobile"
-                  ? "390px"
-                  : deviceMode === "tablet"
-                  ? "768px"
-                  : "100%",
+                deviceMode === "mobile" ? "390px"
+                : deviceMode === "tablet" ? "768px"
+                : "100%",
             }}
           >
             <ProfilePreview profile={liveProfile} deviceMode={deviceMode} />
