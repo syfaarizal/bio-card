@@ -51,7 +51,7 @@ export function RegisterForm() {
             id="username"
             type="text"
             autoComplete="username"
-            placeholder="yourname"
+            placeholder="username"
             className="flex-1 py-2 pr-3 text-sm text-gray-900 outline-none bg-transparent placeholder:text-gray-400 dark:text-zinc-100 dark:placeholder:text-zinc-600"
           />
         </div>
@@ -67,7 +67,7 @@ export function RegisterForm() {
           id="email"
           type="email"
           autoComplete="email"
-          placeholder="you@example.com"
+          placeholder="Enter your email"
           className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
         {errors.email && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.email.message}</p>}
@@ -82,7 +82,7 @@ export function RegisterForm() {
           id="password"
           type="password"
           autoComplete="new-password"
-          placeholder="Min. 8 characters"
+          placeholder="Enter your password"
           className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           />
         {errors.password && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.password.message}</p>}
