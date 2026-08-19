@@ -24,9 +24,9 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
   }
 
   return (
-    <div className="flex gap-6 h-full">
+    <div className="flex h-full min-w-0 flex-col gap-6 xl:flex-row">
       {/* ── Editor Panel ── */}
-      <div className="flex-1 max-w-xl overflow-y-auto space-y-6 pb-6">
+      <div className="min-w-0 flex-1 space-y-6 pb-6 xl:max-w-xl xl:overflow-y-auto">
         <div>
           <h1 className="text-lg font-semibold text-gray-900 dark:text-zinc-50">Edit Profile</h1>
           <p className="text-sm text-gray-500 dark:text-zinc-400">Customize your information and appearance</p>
@@ -41,8 +41,8 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
       </div>
 
       {/* ── Live Preview Panel ── */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <div className="flex items-center justify-between mb-3 flex-shrink-0">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="mb-3 flex flex-shrink-0 flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Live Preview</span>
@@ -50,7 +50,7 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
           <DeviceSwitcher current={deviceMode} onChange={setDeviceMode} />
         </div>
 
-        <div className="flex-1 bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-auto flex items-start justify-center p-4">
+        <div className="flex min-h-[520px] flex-1 items-start justify-center overflow-auto rounded-xl bg-gray-100 p-3 dark:bg-zinc-900 sm:p-4">
           <div
             className="transition-all duration-300 w-full"
             style={{

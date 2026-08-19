@@ -55,7 +55,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
   })
 
   return (
-    <section id="identity" className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+    <section id="identity" className="bg-white rounded-xl border border-gray-200 p-4 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950 sm:p-5">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Identity</h2>
         <SaveStatus status={status} />
@@ -118,7 +118,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
 
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Birthday</label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-3">
           <input
             {...register("birthdayDay")}
             placeholder="Day"

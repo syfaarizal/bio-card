@@ -34,9 +34,9 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
   }
 
   return (
-    <aside className="w-60 flex-shrink-0 border-r border-gray-200 bg-white flex flex-col transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+    <aside className="flex w-full flex-shrink-0 flex-col border-b border-gray-200 bg-white transition-colors dark:border-zinc-800 dark:bg-zinc-950 lg:w-60 lg:border-b-0 lg:border-r">
       {/* Logo */}
-      <div className="h-14 flex items-center px-4 border-b border-gray-200 dark:border-zinc-800">
+      <div className="flex h-14 items-center px-4 border-b border-gray-200 dark:border-zinc-800">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center dark:bg-white">
             <span className="text-white text-xs font-bold dark:text-zinc-950">B</span>
@@ -46,13 +46,13 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <nav className="flex gap-2 overflow-x-auto px-3 py-3 lg:flex-1 lg:flex-col lg:overflow-y-auto lg:py-4 lg:space-y-1">
 
         {/* Edit Profile — collapsible */}
         <button
           onClick={() => setEditorOpen(!editorOpen)}
           className={cn(
-            "w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-colors",
+            "flex min-w-max items-center justify-between gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors lg:w-full",
             isEditorActive
               ? "bg-gray-100 text-gray-900 dark:bg-zinc-900 dark:text-zinc-50"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
@@ -68,12 +68,12 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
         </button>
 
         {editorOpen && (
-          <div className="pl-3 space-y-0.5">
+          <div className="flex gap-1 lg:block lg:pl-3 lg:space-y-0.5">
             {editorLinks.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors dark:text-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
+                className="flex min-w-max items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors dark:text-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
               >
                 <Icon className="w-3.5 h-3.5 flex-shrink-0" />
                 {label}
@@ -86,7 +86,7 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
         <Link
           href="/dashboard/analytics"
           className={cn(
-            "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors",
+            "flex min-w-max items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors",
             pathname === "/dashboard/analytics"
               ? "bg-gray-100 text-gray-900 dark:bg-zinc-900 dark:text-zinc-50"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
@@ -100,7 +100,7 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
         <Link
           href="/dashboard/settings"
           className={cn(
-            "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors",
+            "flex min-w-max items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors",
             pathname === "/dashboard/settings"
               ? "bg-gray-100 text-gray-900 dark:bg-zinc-900 dark:text-zinc-50"
               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
@@ -112,7 +112,7 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
       </nav>
 
       {/* Bottom */}
-      <div className="p-3 border-t border-gray-200 space-y-2 dark:border-zinc-800">
+      <div className="hidden p-3 border-t border-gray-200 space-y-2 dark:border-zinc-800 lg:block">
 
         {/* Profile status + public link */}
         <div className={cn("rounded-xl border px-3 py-2.5", "border-gray-100 bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900/70")}>

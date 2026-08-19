@@ -38,7 +38,7 @@ export function MusicSection({ profile }: Props) {
   const hasMusic = profile.music?.songTitle
 
   return (
-    <section id="music" className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+    <section id="music" className="bg-white rounded-xl border border-gray-200 p-4 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950 sm:p-5">
       <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Music / Now Playing</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -58,7 +58,7 @@ export function MusicSection({ profile }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
+          className="w-full px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 sm:w-auto"
         >
           {loading ? "Fetching…" : "Fetch Song Info"}
         </button>

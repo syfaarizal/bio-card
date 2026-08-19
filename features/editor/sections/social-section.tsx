@@ -44,7 +44,7 @@ export function SocialSection({ profile, onUpdate }: Props) {
   })
 
   return (
-    <section id="social" className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+    <section id="social" className="bg-white rounded-xl border border-gray-200 p-4 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950 sm:p-5">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Social Media Links</h2>
         <SaveStatus status={status} />

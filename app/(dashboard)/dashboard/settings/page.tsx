@@ -88,7 +88,7 @@ export default function SettingsPage() {
       </div>
 
       {/* ── Change Password ── */}
-      <section className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+      <section className="bg-white rounded-2xl border border-gray-200 p-4 space-y-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950 sm:p-5">
         <div>
           <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Change BioCard password</h2>
           <p className="text-xs text-gray-400 mt-0.5 dark:text-zinc-500">This password is separate from your email account password.</p>
@@ -107,7 +107,7 @@ export default function SettingsPage() {
           <button
             type="submit"
             disabled={pwLoading || !newPassword}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-xl hover:bg-gray-700 disabled:opacity-50 transition-colors dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
+            className="flex w-full items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-xl hover:bg-gray-700 disabled:opacity-50 transition-colors dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 sm:w-auto"
           >
             {pwLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
             {pwLoading ? "Updating…" : "Update BioCard password"}
@@ -116,7 +116,7 @@ export default function SettingsPage() {
       </section>
 
       {/* ── Danger Zone ── */}
-      <section className="bg-white rounded-2xl border border-red-100 p-5 space-y-4 transition-colors dark:border-red-950/70 dark:bg-zinc-950">
+      <section className="bg-white rounded-2xl border border-red-100 p-4 space-y-4 transition-colors dark:border-red-950/70 dark:bg-zinc-950 sm:p-5">
         <div>
           <h2 className="text-sm font-semibold text-red-700 dark:text-red-400">Danger Zone</h2>
           <p className="text-xs text-gray-500 mt-0.5 dark:text-zinc-400">
@@ -127,7 +127,7 @@ export default function SettingsPage() {
         {!showDeleteConfirm ? (
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="px-4 py-2 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 transition-colors dark:border-red-900/70 dark:text-red-300 dark:hover:bg-red-950/40"
+            className="w-full px-4 py-2 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 transition-colors dark:border-red-900/70 dark:text-red-300 dark:hover:bg-red-950/40 sm:w-auto"
           >
             Delete my account
           </button>
@@ -150,11 +150,11 @@ export default function SettingsPage() {
                 {deleteError}
               </p>
             )}
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <button
                 onClick={handleDeleteAccount}
                 disabled={deleteLoading || !deleteInput}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 transition-colors"
               >
                 {deleteLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {deleteLoading ? "Deleting…" : "Confirm delete"}

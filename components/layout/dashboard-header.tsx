@@ -51,8 +51,8 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
   }
 
   return (
-    <header className="h-14 flex items-center justify-between px-6 border-b border-gray-200 bg-white flex-shrink-0 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex items-center gap-3">
+    <header className="relative flex min-h-14 flex-shrink-0 flex-col gap-3 border-b border-gray-200 bg-white px-4 py-3 transition-colors dark:border-zinc-800 dark:bg-zinc-950 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-0">
+      <div className="flex min-w-0 items-center gap-3">
         <span className={cn("text-xs font-medium px-2 py-1 rounded-full", status.className)}>
           {status.label}
         </span>
@@ -61,15 +61,15 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
             href={`/${profile.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors dark:text-zinc-500 dark:hover:text-zinc-200"
+            className="flex min-w-0 items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors dark:text-zinc-500 dark:hover:text-zinc-200"
           >
-            biocard.app/{profile.slug}
+            <span className="truncate">biocard.app/{profile.slug}</span>
             <ExternalLink className="w-3 h-3" />
           </a>
         )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <ThemeToggle />
 
         <button
@@ -98,7 +98,7 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
           {loading ? "Saving..." : currentStatus === "PUBLISHED" ? "Published" : "Publish"}
         </button>
       </div>
-      {error && <p className="absolute top-14 right-6 text-xs text-red-600 dark:text-red-400">{error}</p>}
+      {error && <p className="text-xs text-red-600 dark:text-red-400 sm:absolute sm:top-14 sm:right-6">{error}</p>}
     </header>
   )
 }

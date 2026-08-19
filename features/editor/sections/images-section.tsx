@@ -38,7 +38,7 @@ export function ImagesSection({ profile, onUpdate }: Props) {
   }
 
   return (
-    <section id="images" className="bg-white dark:bg-zinc-950 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 space-y-5">
+    <section id="images" className="bg-white dark:bg-zinc-950 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 space-y-5 sm:p-5">
       <div>
         <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Images</h2>
         <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">

@@ -43,9 +43,9 @@ export function ThemeSection({ profile, onUpdate }: Props) {
   }
 
   return (
-    <section id="theme" className="bg-white rounded-xl border border-gray-200 p-5 transition-colors dark:border-zinc-800 dark:bg-zinc-950">
+    <section id="theme" className="bg-white rounded-xl border border-gray-200 p-4 transition-colors dark:border-zinc-800 dark:bg-zinc-950 sm:p-5">
       <h2 className="text-sm font-semibold text-gray-900 mb-4 dark:text-zinc-50">Theme Color</h2>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         {THEMES.map((theme) => (
           <button
             key={theme.id}
