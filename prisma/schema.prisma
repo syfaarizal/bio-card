@@ -38,6 +38,7 @@ model Profile {
 
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   links          SocialLinks?
+  profileLinks   ProfileLink[]
   music          Music?
   images         Image[]
   views          ViewLog[]
@@ -58,6 +59,24 @@ model SocialLinks {
   youtube   String?
 
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+// Dynamic links system - replaces fixed SocialLinks fields
+model ProfileLink {
+  id        String   @id @default(cuid())
+  profileId String
+  title     String
+  url       String
+  provider  String   @default("custom") // instagram, tiktok, x, youtube, discord, github, etc.
+  icon      String?  // Optional custom icon identifier
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
 }
 
 model Music {

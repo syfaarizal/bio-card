@@ -1,13 +1,14 @@
 "use client"
 
-import type { FullProfile } from "@/types"
+import type { FullProfile, ProfileLink } from "@/types"
 import type { DeviceMode } from "@/components/shared/device-switcher"
 import { getActiveSinceYear } from "@/lib/utils"
-import { AtSign, PlayCircle, Music2, MapPin, Calendar, Zap, BadgeCheck } from "lucide-react"
+import { MapPin, Calendar, Zap, BadgeCheck } from "lucide-react"
 import { motion } from "motion/react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar-decoration"
+import { BrandIcon } from "@/components/shared/brand-icon"
 
 interface Props {
   profile: FullProfile
@@ -93,12 +94,10 @@ function ProfileCard({ profile, compact = false }: { profile: FullProfile; compa
 
   const activeSince = getActiveSinceYear(profile.createdAt)
 
-  const socialLinks = [
-    { href: profile.links?.instagram, icon: AtSign },
-    { href: profile.links?.tiktok,    icon: Music2 },
-    { href: profile.links?.twitter,   icon: AtSign },
-    { href: profile.links?.youtube,   icon: PlayCircle },
-  ].filter((l) => Boolean(l.href))
+  // Dynamic links from ProfileLink model
+  const links = (profile.profileLinks ?? [])
+    .filter((l: ProfileLink) => l.isActive)
+    .sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
 
   const bannerH    = compact ? "h-24" : "h-32"
   const avatarSize = compact ? 72 : 88
@@ -177,12 +176,15 @@ function ProfileCard({ profile, compact = false }: { profile: FullProfile; compa
         </div>
       )}
 
-      {/* Social */}
-      {socialLinks.length > 0 && (
+      {/* Links */}
+      {links.length > 0 && (
         <div className={cn("flex justify-center gap-2 pb-3", px)}>
-          {socialLinks.map(({ href, icon: Icon }, i) => (
-            <span key={i} className={cn("flex items-center justify-center w-8 h-8 rounded-full border", t.socialBg, t.socialBorder)}>
-              <Icon className="w-3.5 h-3.5" />
+          {links.slice(0, 6).map((link: ProfileLink) => (
+            <span
+              key={link.id}
+              className={cn("flex items-center justify-center w-8 h-8 rounded-full border", t.socialBg, t.socialBorder)}
+            >
+              <BrandIcon provider={link.provider} className="w-3.5 h-3.5" />
             </span>
           ))}
         </div>

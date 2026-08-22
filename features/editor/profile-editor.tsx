@@ -3,7 +3,7 @@
 import { useState } from "react"
 import type { FullProfile } from "@/types"
 import { IdentitySection } from "./sections/identity-section"
-import { SocialSection } from "./sections/social-section"
+import { LinksSection } from "./sections/links-section"
 import { MusicSection } from "./sections/music-section"
 import { ImagesSection } from "./sections/images-section"
 import { ThemeSection } from "./sections/theme-section"
@@ -23,6 +23,10 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
     setLiveProfile((prev: FullProfile) => ({ ...prev, ...updates }))
   }
 
+  const updateLinks = (updates: { profileLinks?: typeof liveProfile.profileLinks }) => {
+    updatePreview(updates as Partial<FullProfile>)
+  }
+
   return (
     <div className="flex h-full min-w-0 flex-col gap-6 xl:flex-row">
       {/* ── Editor Panel ── */}
@@ -36,7 +40,7 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
         <DecorationSection profile={liveProfile} onUpdate={updatePreview} />
         <ImagesSection profile={liveProfile} onUpdate={updatePreview} />
         <IdentitySection profile={liveProfile} onUpdate={updatePreview} />
-        <SocialSection profile={liveProfile} onUpdate={updatePreview} />
+        <LinksSection links={liveProfile.profileLinks ?? []} onUpdate={updatePreview} />
         <MusicSection profile={liveProfile} />
       </div>
 

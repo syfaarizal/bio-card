@@ -146,7 +146,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <input
           {...register("tags")}
           onChange={(e) => { register("tags").onChange(e); handleChange() }}
-          placeholder="Developer, Anime, Creator"
+          placeholder="Tags separated by commas"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
         <p className="mt-1 text-xs text-gray-400 dark:text-zinc-500">Separate with commas. Max 5 tags.</p>

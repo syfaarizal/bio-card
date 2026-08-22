@@ -12,6 +12,7 @@ export default async function ProfilePage() {
     where: { userId: user.id },
     include: {
       links: true,
+      profileLinks: { orderBy: { sortOrder: "asc" } },
       music: true,
       images: true,
       user: { select: { username: true, email: true } },

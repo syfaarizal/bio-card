@@ -3,11 +3,13 @@
 import { motion } from "motion/react"
 import type { FullProfile } from "@/types"
 import { getActiveSinceYear } from "@/lib/utils"
-import { AtSign, PlayCircle, Music2, MapPin, Calendar, Zap, BadgeCheck } from "lucide-react"
+import { MapPin, Calendar, Zap, BadgeCheck } from "lucide-react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar-decoration"
+import { BrandIcon } from "@/components/shared/brand-icon"
+import type { ProfileLink } from "@/types"
 
 interface Props {
   profile: FullProfile
@@ -100,12 +102,14 @@ export function PublicProfilePage({ profile }: Props) {
   const activeSince = getActiveSinceYear(profile.createdAt)
   const decoration = (profile.profileEffect ?? "none") as DecorationId
 
-  const socialLinks = [
-    { href: profile.links?.instagram, icon: AtSign, label: "Instagram" },
-    { href: profile.links?.tiktok,    icon: Music2,     label: "TikTok" },
-    { href: profile.links?.twitter,   icon: AtSign,     label: "Twitter" },
-    { href: profile.links?.youtube,   icon: PlayCircle, label: "YouTube" },
-  ].filter((l) => Boolean(l.href))
+  // Dynamic links from ProfileLink model
+  const links = (profile.profileLinks ?? [])
+    .filter((l: ProfileLink) => l.isActive)
+    .sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
+
+  // Display first 5 links on main row, rest will be shown in "more" section
+  const displayLinks = links.slice(0, 5)
+  const hiddenLinks = links.slice(5)
 
   return (
     <div className={cn("min-h-screen transition-colors duration-300", t.bg)}>
@@ -191,16 +195,66 @@ export function PublicProfilePage({ profile }: Props) {
             </motion.div>
           )}
 
-          {/* ── SOCIAL LINKS ── */}
-          {socialLinks.length > 0 && (
-            <motion.div variants={fadeUp} className="px-6 pb-5 flex justify-center gap-3">
-              {socialLinks.map(({ href, icon: Icon, label }) => (
-                <a key={label} href={href!} target="_blank" rel="noopener noreferrer" title={label}
-                  className={cn("flex items-center justify-center w-11 h-11 rounded-full border transition-all hover:scale-110 active:scale-95", t.socialBg, t.socialBorder)}>
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-            </motion.div>
+          {/* ── LINKS ── */}
+          {links.length > 0 && (
+            <>
+              <motion.div variants={fadeUp} className="px-6 pb-5 flex justify-center gap-3 flex-wrap">
+                {displayLinks.map((link: ProfileLink) => (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={link.title}
+                    className={cn(
+                      "flex items-center justify-center w-11 h-11 rounded-full border transition-all hover:scale-110 active:scale-95",
+                      t.socialBg,
+                      t.socialBorder
+                    )}
+                  >
+                    <BrandIcon provider={link.provider} className="w-4 h-4" />
+                  </a>
+                ))}
+                {hiddenLinks.length > 0 && (
+                  <div
+                    title={`${hiddenLinks.length} more link${hiddenLinks.length > 1 ? "s" : ""}`}
+                    className={cn(
+                      "flex items-center justify-center w-11 h-11 rounded-full border bg-gray-200 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 text-xs font-bold",
+                      t.socialBorder
+                    )}
+                  >
+                    +{hiddenLinks.length}
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Expanded links for mobile/tablet - show all if there are hidden links */}
+              {hiddenLinks.length > 0 && (
+                <motion.div variants={fadeUp} className="px-6 pb-4">
+                  <div className={cn("rounded-xl border p-3", t.surface, t.surfaceBorder)}>
+                    <p className={cn("text-[10px] font-semibold uppercase tracking-wider mb-2", t.muted)}>More Links</p>
+                    <div className="flex flex-wrap gap-2">
+                      {hiddenLinks.map((link: ProfileLink) => (
+                        <a
+                          key={link.id}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cn(
+                            "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors hover:opacity-80",
+                            t.socialBg,
+                            t.socialBorder
+                          )}
+                        >
+                          <BrandIcon provider={link.provider} className="w-3.5 h-3.5" />
+                          {link.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </>
           )}
 
           {/* ── BIRTHDAY + ACTIVE SINCE ── */}

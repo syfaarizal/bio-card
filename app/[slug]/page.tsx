@@ -15,7 +15,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const profile = await prisma.profile.findUnique({
     where: { slug, status: "PUBLISHED" },
-    include: { images: true },
+    include: {
+      links: true,
+      profileLinks: { orderBy: { sortOrder: "asc" } },
+      music: true,
+      images: true,
+      user: { select: { username: true, email: true } },
+    },
   })
 
   if (!profile) return { title: "Profile not found" }
@@ -54,6 +60,7 @@ export default async function Page({ params }: Props) {
     where: { slug, status: "PUBLISHED" },
     include: {
       links: true,
+      profileLinks: { orderBy: { sortOrder: "asc" } },
       music: true,
       images: true,
       user: { select: { username: true, email: true } },

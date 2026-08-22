@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { isReservedSlug } from "./reserved-slugs"
 import { normalizeSpotifyTrackUrl } from "./spotify"
+import { normalizeUrl, validateUrl } from "./links/detect"
 
 const usernameRegex = /^[a-z0-9_-]+$/
 
@@ -40,7 +41,7 @@ export const profileIdentitySchema = z.object({
     .string()
     .min(3, "Slug must be at least 3 characters")
     .max(20, "Slug must be at most 20 characters")
-    .regex(usernameRegex, "Only lowercase letters, numbers, underscores, and dashes allowed")
+    .regex(usernameRegex, "Slug must be lowercase letters, numbers, underscores, and dashes")
     .refine((val) => !isReservedSlug(val), "This URL is reserved and can't be used"),
   bio: z.string().max(100, "Max 100 characters").optional(),
   location: z.string().max(50, "Max 50 characters").optional(),
@@ -67,6 +68,20 @@ export const musicSchema = z.object({
     ),
 })
 
+// Dynamic link validation schema
+export const linkSchema = z.object({
+  title: z.string().min(1, "Label is required").max(50, "Max 50 characters"),
+  url: z.string().min(1, "URL is required").refine(
+    (url) => {
+      const normalized = normalizeUrl(url)
+      const result = validateUrl(normalized)
+      return result.valid
+    },
+    { message: "Enter a valid URL" }
+  ),
+  provider: z.string().optional(),
+})
+
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
@@ -74,3 +89,4 @@ export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>
 export type ProfileIdentityInput = z.infer<typeof profileIdentitySchema>
 export type SocialLinksInput = z.infer<typeof socialLinksSchema>
 export type MusicInput = z.infer<typeof musicSchema>
+export type LinkInput = z.infer<typeof linkSchema>

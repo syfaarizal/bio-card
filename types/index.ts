@@ -13,11 +13,15 @@ export { ProfileStatus, ImageType } from "@prisma/client"
 export type FullProfile = Prisma.ProfileGetPayload<{
   include: {
     links: true
+    profileLinks: { orderBy: { sortOrder: "asc" } }
     music: true
     images: true
     user: { select: { username: true; email: true } }
   }
 }>
+
+// ProfileLink type
+export type ProfileLink = Prisma.ProfileLinkGetPayload<object>
 
 // Theme config
 export interface ThemeConfig {
@@ -71,11 +75,19 @@ export interface ProfileFormData {
   themeId: string
 }
 
+// Deprecated: Use ProfileLink instead
 export interface SocialLinksFormData {
   instagram: string
   tiktok: string
   twitter: string
   youtube: string
+}
+
+// Link form data for dynamic links
+export interface LinkFormData {
+  title: string
+  url: string
+  provider?: string
 }
 
 export interface MusicFormData {
