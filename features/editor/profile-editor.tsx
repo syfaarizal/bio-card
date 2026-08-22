@@ -26,7 +26,7 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
   return (
     <div className="flex h-full min-w-0 flex-col gap-6 xl:flex-row">
       {/* ── Editor Panel ── */}
-      <div className="min-w-0 flex-1 space-y-6 pb-6 xl:max-w-xl xl:overflow-y-auto">
+      <div className="min-w-0 flex-1 space-y-6 pb-6 pr-2 sm:pr-4 xl:max-w-xl xl:overflow-y-auto">
         <div>
           <h1 className="text-lg font-semibold text-gray-900 dark:text-zinc-50">Edit Profile</h1>
           <p className="text-sm text-gray-500 dark:text-zinc-400">Customize your information and appearance</p>

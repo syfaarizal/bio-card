@@ -76,7 +76,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <input
           {...register("displayName")}
           onChange={(e) => { register("displayName").onChange(e); handleChange() }}
-          placeholder="Kai Shi"
+          placeholder="Your Name"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
         {errors.displayName && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.displayName.message}</p>}
@@ -100,7 +100,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <input
           {...register("bio")}
           onChange={(e) => { register("bio").onChange(e); handleChange() }}
-          placeholder="Coder, Creator, Developer"
+          placeholder="Describe yourself in a few words"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
         {errors.bio && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.bio.message}</p>}
@@ -111,7 +111,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <input
           {...register("location")}
           onChange={(e) => { register("location").onChange(e); handleChange() }}
-          placeholder="Jawa Barat, Indonesia"
+          placeholder="Your City, Country"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
       </div>
