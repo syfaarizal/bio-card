@@ -12,12 +12,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   if (!user) redirect("/login")
 
+  // Also check user hasn't been soft-deleted
   const profile = await prisma.profile.findUnique({
     where: { userId: user.id },
     include: { user: true },
   })
 
-  if (!profile) redirect("/login")
+  if (!profile || profile.user.deletedAt) {
+    // Profile tidak ditemukan atau user di-delete — clear stale session
+    await supabase.auth.signOut()
+    redirect("/login")
+  }
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden bg-gray-50 text-gray-900 transition-colors dark:bg-zinc-950 dark:text-zinc-100 lg:h-screen lg:flex-row lg:overflow-hidden">
