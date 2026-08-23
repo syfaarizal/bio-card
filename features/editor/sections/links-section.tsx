@@ -300,7 +300,7 @@ export function LinksSection({ links, onUpdate }: Props) {
       <dialog
         ref={dialogRef}
         onClose={closeDialog}
-        className="p-0 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl backdrop:bg-black/50 w-full max-w-md"
+        className="fixed inset-0 m-auto p-0 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl backdrop:bg-black/50 w-full max-w-md h-fit"
       >
         <form ref={formRef} onSubmit={handleSubmit} className="p-5 space-y-4">
           <div className="flex items-center justify-between">
@@ -412,7 +412,7 @@ export function LinksSection({ links, onUpdate }: Props) {
       <dialog
         ref={deleteDialogRef}
         onClose={() => setDeletingId(null)}
-        className="p-0 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl backdrop:bg-black/50 w-full max-w-sm"
+        className="fixed inset-0 m-auto p-0 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl backdrop:bg-black/50 w-full max-w-sm h-fit"
       >
         <div className="p-5 space-y-4">
           <div className="flex items-center gap-3">
