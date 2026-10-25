@@ -9,8 +9,8 @@ interface Props {
 
 export function PublicProfilePage({ profile }: Props) {
   return (
-    <div className="min-h-screen bg-gray-950 p-2 sm:p-5 lg:p-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <div className="min-h-screen bg-gray-950 p-2 sm:p-3">
+      <div className="w-full">
         <ProfileLayout profile={profile} mode="responsive" />
       </div>
     </div>

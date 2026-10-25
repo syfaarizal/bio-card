@@ -35,22 +35,23 @@ export function ProfileLayout({ profile, mode }: Props) {
   const links = (profile.profileLinks ?? []).filter((link: ProfileLink) => link.isActive).sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
   const activeSince = getActiveSinceYear(profile.createdAt)
   const decoration = (profile.profileEffect ?? "none") as DecorationId
-  const mainPad = responsive ? "p-3 md:p-5" : wide ? "p-5" : "p-3"
+  const mainPad = responsive ? "p-2 md:p-3" : wide ? "p-3" : "p-2"
   const statsGrid = "grid-cols-2"
   const galleryGrid = "grid-cols-3"
 
   return (
-    <div className={cn("w-full min-h-[420px] overflow-hidden rounded-xl border shadow-sm", t.page, t.border)}>
+    <div className={cn("w-full min-h-[420px] overflow-hidden rounded-lg border shadow-sm", t.page, t.border)}>
       <div className="min-h-[inherit]">
         <main id="profile" className={cn("min-w-0", t.panel, mainPad)}>
-          <div className="relative overflow-hidden rounded-xl">
-            <div className="relative h-28 overflow-hidden sm:h-32">
+          <div className="relative overflow-hidden rounded-lg">
+            <div className="relative h-28 overflow-hidden sm:h-36">
               {banner ? <Image src={banner.url} alt="Profile banner" fill priority className="object-cover" /> : <div className={cn("h-full", t.bannerFallback)} />}
               <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
             </div>
 
-            <div className={cn("relative flex flex-wrap gap-4 px-4 pb-4", responsive ? "-mt-10 flex-col items-center pt-0 md:-mt-12 md:flex-row md:items-end md:px-6" : wide ? "-mt-12 flex-row items-end pt-0" : "-mt-10 flex-col items-center pt-0")}>
-              <div className={cn("relative h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md sm:h-[88px] sm:w-[88px]", t.avatarRing)}>
+            <div className={cn("relative -mt-7 rounded-t-[28px]", t.panel)}>
+            <div className={cn("relative flex flex-wrap gap-4 px-4 pb-4", responsive ? "flex-col items-center pt-0 md:flex-row md:items-center md:px-6" : wide ? "flex-row items-center pt-0" : "flex-col items-center pt-0")}>
+              <div className={cn("relative -mt-10 h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md sm:-mt-12 sm:h-[88px] sm:w-[88px]", t.avatarRing)}>
                 <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-700">
                   {avatar ? <Image src={avatar.url} alt={profile.displayName ?? profile.slug} fill className="object-cover" /> : <div className="flex h-full items-center justify-center text-2xl font-black text-white/70">{(profile.displayName ?? profile.slug)[0]?.toUpperCase()}</div>}
                 </div>
@@ -72,6 +73,7 @@ export function ProfileLayout({ profile, mode }: Props) {
               </div>}
             </div>
 
+            </div>
             <div className={cn("mx-4 mb-4 border-t", t.border)} />
 
             <div className={cn("grid gap-3 px-4 pb-4", statsGrid)}>

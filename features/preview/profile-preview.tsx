@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function ProfilePreview({ profile, deviceMode = "desktop" }: Props) {
-  const maxWidth = deviceMode === "mobile" ? 390 : deviceMode === "tablet" ? 768 : 1280
+  const maxWidth = deviceMode === "mobile" ? 390 : "100%"
 
   return (
     <div className="w-full rounded-xl bg-gray-100 p-2 dark:bg-zinc-900 sm:p-3">
