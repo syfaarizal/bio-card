@@ -4,6 +4,7 @@ import { useState } from "react"
 import { AvatarDecorationPicker, type DecorationId } from "@/components/shared/avatar-decoration"
 import { SaveStatus } from "@/components/shared/save-status"
 import type { FullProfile } from "@/types"
+import { saveProfileDecoration } from "@/actions/profile"
 import { Lock } from "lucide-react"
 
 interface Props {
@@ -12,13 +13,16 @@ interface Props {
 }
 
 export function DecorationSection({ profile, onUpdate }: Props) {
-  const current = "none" as DecorationId
+  const current = (profile.profileEffect ?? "none") as DecorationId
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
 
   const handleSelect = async (id: DecorationId) => {
-    onUpdate({} as Partial<FullProfile>)
+    const effect = id === "none" ? null : id
+    onUpdate({ profileEffect: effect })
     setStatus("saving")
     try {
+      const result = await saveProfileDecoration(effect)
+      if (!result.success) throw new Error("Failed to save profile decoration")
       setStatus("saved")
       setTimeout(() => setStatus("idle"), 2000)
     } catch {
