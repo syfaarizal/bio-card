@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "image-cdn-ak.spotifycdn.com", // Spotify album art CDN
       },
+      {
+        protocol: "https",
+        hostname: "image-cdn-fa.spotifycdn.com", // Spotify album art CDN
+      },
     ],
   },
   experimental: {
