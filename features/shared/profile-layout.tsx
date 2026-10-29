@@ -50,13 +50,14 @@ export function ProfileLayout({ profile, mode }: Props) {
             </div>
 
             <div className={cn("relative -mt-7 rounded-t-[28px]", t.panel)}>
-            <div className={cn("relative flex flex-wrap gap-4 px-4 pb-4", responsive ? "flex-col items-center pt-0 md:flex-row md:items-center md:px-6" : wide ? "flex-row items-center pt-0" : "flex-col items-center pt-0")}>
-              <div className={cn("relative -mt-10 h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md sm:-mt-12 sm:h-[88px] sm:w-[88px]", t.avatarRing)}>
+            <div className={cn("relative flex flex-col gap-3 px-4 py-4", responsive ? "items-center md:flex-row md:items-start md:justify-between md:gap-6 md:px-6" : wide ? "flex-row items-start justify-between gap-6" : "items-center")}>
+              <div className={cn("flex flex-wrap gap-4", responsive ? "w-full flex-col items-center justify-center md:w-auto md:flex-1 md:flex-row md:items-center md:justify-start" : wide ? "min-w-0 flex-1 flex-row items-center" : "w-full flex-col items-center")}>
+              <div className={cn("relative h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md sm:h-[88px] sm:w-[88px]", responsive ? "-mt-10 sm:-mt-12 md:mt-0" : wide ? "mt-0" : "-mt-10 sm:-mt-12", t.avatarRing)}>
                 <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-700">
                   {avatar ? <Image src={avatar.url} alt={profile.displayName ?? profile.slug} fill className="object-cover" /> : <div className="flex h-full items-center justify-center text-2xl font-black text-white/70">{(profile.displayName ?? profile.slug)[0]?.toUpperCase()}</div>}
                 </div>
                 <DecorationOverlay id={decoration} size={88} />
-                <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
+                <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
               </div>
               <div className={cn("min-w-0 flex-1", simulatedMobile && "text-center", responsive && "text-center md:text-left")}>
                 <p className={cn("text-[10px] font-semibold tracking-widest", t.accent)}>@{profile.slug}</p>
@@ -67,10 +68,27 @@ export function ProfileLayout({ profile, mode }: Props) {
                   <p className={cn("flex items-center gap-1", t.muted)}><Zap className="h-3 w-3" />Active since {activeSince} <span className={t.accent}>★★★</span></p>
                 </div>
               </div>
-              {(profile.tags?.length ?? 0) > 0 && <div className={cn("flex flex-wrap gap-1.5", responsive ? "justify-center md:justify-start" : simulatedMobile ? "justify-center" : "")}>{(profile.tags ?? []).slice(0, 4).map((tag) => <span key={tag} className={cn("rounded-full border px-2.5 py-1 text-[9px]", t.border, t.soft, t.accent)}>{tag}</span>)}</div>}
-              {links.length > 0 && <div className={cn("flex gap-2", responsive ? "justify-center md:justify-start" : simulatedMobile ? "justify-center" : "")}>
-                {links.slice(0, 6).map((link) => <a key={link.id} href={link.url} title={link.title} target="_blank" rel="noreferrer" className={cn("flex h-8 w-8 items-center justify-center rounded-full border", t.border, t.soft, t.accent)}><BrandIcon provider={link.provider} className="h-3.5 w-3.5" /></a>)}
-              </div>}
+              </div>
+
+              <div className={cn("flex flex-col gap-2", responsive ? "w-full items-center md:w-auto md:shrink-0 md:items-end" : wide ? "shrink-0 items-end" : "w-full items-center")}>
+              {(profile.tags?.length ?? 0) > 0 && (
+                <div className={cn("flex flex-wrap gap-1.5", responsive ? "justify-center md:justify-end" : wide ? "justify-end" : "justify-center")}>
+                  {(profile.tags ?? []).slice(0, 4).map((tag) => (
+                    <span key={tag} className={cn("rounded-full border px-2.5 py-1 text-[9px] font-medium", t.border, t.soft, t.accent)}>{tag}</span>
+                  ))}
+                </div>
+              )}
+
+              {links.length > 0 && (
+                <div className={cn("flex flex-wrap items-center gap-2", responsive ? "justify-center md:justify-end" : wide ? "justify-end" : "justify-center")}>
+                  {links.slice(0, 6).map((link) => (
+                    <a key={link.id} href={link.url} title={link.title} target="_blank" rel="noreferrer" className={cn("flex h-9 w-9 items-center justify-center rounded-full border transition-transform hover:scale-105", t.border, t.soft, t.accent)}>
+                      <BrandIcon provider={link.provider} className="h-4 w-4" />
+                    </a>
+                  ))}
+                </div>
+              )}
+              </div>
             </div>
 
             </div>
