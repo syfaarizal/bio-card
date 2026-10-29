@@ -9,10 +9,10 @@ interface Props {
 
 export function PublicProfilePage({ profile }: Props) {
   return (
-    <div className="min-h-screen bg-gray-950 p-2 sm:p-3">
-      <div className="w-full">
-        <ProfileLayout profile={profile} mode="responsive" />
-      </div>
+    // On phones and tablets the card fills the viewport edge to edge; on
+    // desktop it keeps the page padding and its natural height.
+    <div className="min-h-dvh bg-gray-950 lg:min-h-screen lg:p-3">
+      <ProfileLayout profile={profile} mode="responsive" fillHeight />
     </div>
   )
 }

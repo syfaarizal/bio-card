@@ -13,6 +13,8 @@ type LayoutMode = DeviceMode | "responsive"
 interface Props {
   profile: FullProfile
   mode: LayoutMode
+  /** Fill the viewport height — used on the public page so the card is not a half-height strip on phones and tablets. */
+  fillHeight?: boolean
 }
 
 const THEMES: Record<string, { page: string; panel: string; muted: string; accent: string; border: string; soft: string; identity: string; bannerFallback: string; avatarRing: string }> = {
@@ -23,7 +25,7 @@ const THEMES: Record<string, { page: string; panel: string; muted: string; accen
   glass: { page: "bg-violet-50", panel: "bg-white/70", muted: "text-violet-500", accent: "text-violet-600", border: "border-violet-200", soft: "bg-violet-50/70", identity: "text-violet-950", bannerFallback: "bg-gradient-to-r from-violet-950 via-indigo-900 to-purple-950", avatarRing: "bg-violet-600" },
 }
 
-export function ProfileLayout({ profile, mode }: Props) {
+export function ProfileLayout({ profile, mode, fillHeight = false }: Props) {
   const simulatedMobile = mode === "mobile"
   const responsive = mode === "responsive"
   const wide = !simulatedMobile
@@ -36,15 +38,25 @@ export function ProfileLayout({ profile, mode }: Props) {
   const links = (profile.profileLinks ?? []).filter((link: ProfileLink) => link.isActive).sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
   const activeSince = getActiveSinceYear(profile.createdAt)
   const decoration = (profile.profileEffect ?? "none") as DecorationId
-  const mainPad = responsive ? "p-2 md:p-3" : wide ? "p-3" : "p-2"
+  // Mobile and tablet go edge to edge; padding returns at desktop.
+  const mainPad = fillHeight ? "p-0 lg:p-3" : responsive ? "p-2 md:p-3" : wide ? "p-3" : "p-2"
   const statsGrid = "grid-cols-2"
   const galleryGrid = "grid-cols-3"
 
   return (
-    <div className={cn("w-full min-h-[420px] overflow-hidden rounded-lg border shadow-sm", t.page, t.border)}>
-      <div className="min-h-[inherit]">
-        <main id="profile" className={cn("min-w-0", t.panel, mainPad)}>
-          <div className="relative overflow-hidden rounded-lg">
+    <div
+      className={cn(
+        "w-full overflow-hidden",
+        fillHeight
+          ? "flex min-h-dvh flex-col rounded-none border-0 shadow-none lg:min-h-0 lg:rounded-lg lg:border lg:shadow-sm"
+          : "min-h-[420px] rounded-lg border shadow-sm",
+        t.page,
+        t.border
+      )}
+    >
+      <div className={cn(fillHeight ? "flex flex-1 flex-col" : "min-h-[inherit]")}>
+        <main id="profile" className={cn("min-w-0", fillHeight && "flex flex-1 flex-col", t.panel, mainPad)}>
+          <div className={cn("relative overflow-hidden", fillHeight ? "rounded-none lg:rounded-lg" : "rounded-lg")}>
             <div className="relative h-28 overflow-hidden sm:h-36">
               {banner ? <FocusedImage src={banner.url} alt="Profile banner" focusX={banner.focusX} focusY={banner.focusY} zoom={banner.zoom} sizes="(max-width: 640px) 100vw, 768px" priority /> : <div className={cn("h-full", t.bannerFallback)} />}
               <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
@@ -100,7 +112,7 @@ export function ProfileLayout({ profile, mode }: Props) {
               <div className={cn("flex items-center justify-between rounded-xl border p-3", t.border, t.soft)}><div><p className={cn("flex items-center gap-1 text-[9px] uppercase", t.muted)}><Zap className="h-3 w-3" />Active Since</p><p className="mt-1 text-sm font-bold">{activeSince}</p><p className={cn("text-[9px]", t.accent)}>★★★</p></div><span className={cn("text-lg", t.accent)}>✧</span></div>
             </div>
 
-            {gallery.length > 0 && <section id="gallery" className="px-4 pb-4"><div className="mb-2 flex items-center justify-between"><h2 className="text-xs font-semibold">Gallery</h2><span className={cn("text-[9px]", t.accent)}>View all →</span></div><div className={cn("grid gap-2", galleryGrid)}>{gallery.map((img, index) => img && <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg"><FocusedImage src={img.url} alt={`Gallery image ${index + 1}`} focusX={img.focusX} focusY={img.focusY} zoom={img.zoom} sizes="(max-width: 640px) 33vw, 384px" /></div>)}</div></section>}
+            {gallery.length > 0 && <section id="gallery" className="px-4 pb-4"><div className="mb-2 flex items-center justify-between"><h2 className="text-xs font-semibold">Gallery</h2></div><div className={cn("grid gap-2", galleryGrid)}>{gallery.map((img, index) => img && <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg"><FocusedImage src={img.url} alt={`Gallery image ${index + 1}`} focusX={img.focusX} focusY={img.focusY} zoom={img.zoom} sizes="(max-width: 640px) 33vw, 384px" /></div>)}</div></section>}
 
             <section className="px-4 pb-4"><div className={cn("flex items-center gap-3 rounded-xl border p-3", t.border, t.soft)}>
               {profile.music?.albumArt ? <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full"><Image src={profile.music.albumArt} alt="Album cover" fill className="object-cover" /></div> : <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", t.soft)}><Music2 className={cn("h-4 w-4", t.accent)} /></div>}
@@ -108,7 +120,7 @@ export function ProfileLayout({ profile, mode }: Props) {
               <span className={cn("text-sm", t.accent)}>▷</span>
             </div></section>
           </div>
-          <p className={cn("pt-3 text-center text-[9px]", t.muted)}>Made with BioCard</p>
+          <p className={cn("py-3 text-center text-[9px]", t.muted, fillHeight && "mt-auto pt-6")}>Made with BioCard</p>
         </main>
       </div>
     </div>
