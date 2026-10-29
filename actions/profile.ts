@@ -2,11 +2,12 @@
 
 import { prisma } from "@/lib/prisma"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
-import { profileIdentitySchema, socialLinksSchema, musicSchema } from "@/lib/validations"
+import { profileIdentitySchema, socialLinksSchema, musicSchema, imageFocusSchema } from "@/lib/validations"
 import { fetchSpotifyOEmbed } from "@/lib/spotify"
 import { isReservedSlug } from "@/lib/reserved-slugs"
 import { revalidatePath } from "next/cache"
-import type { ProfileIdentityInput, SocialLinksInput, MusicInput } from "@/lib/validations"
+import type { ProfileIdentityInput, SocialLinksInput, MusicInput, ImageFocusInput } from "@/lib/validations"
+import type { ImageSlotType } from "@/lib/image-slots"
 
 async function getCurrentUserId(): Promise<string> {
   const supabase = await createServerSupabaseClient()
@@ -115,17 +116,43 @@ export async function saveMusic(input: MusicInput) {
 
 // ─── Image actions (v2 — 5 slots) ────────────────────────────────────────────
 
-type ImageSlotType = "PROFILE" | "BANNER" | "GALLERY_1" | "GALLERY_2" | "GALLERY_3"
-
 export async function saveImage(type: ImageSlotType, url: string) {
   const userId = await getCurrentUserId()
   const profile = await prisma.profile.findUnique({ where: { userId } })
   if (!profile) return { error: "Profile not found." }
 
   await prisma.image.deleteMany({ where: { profileId: profile.id, type } })
+  // A new file is different pixels — the old focal point must not carry over.
   await prisma.image.create({ data: { profileId: profile.id, type, url } })
 
   revalidatePath("/dashboard/profile")
+  return { success: true }
+}
+
+export async function saveImageFocus(input: ImageFocusInput) {
+  const parsed = imageFocusSchema.safeParse(input)
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0].message }
+  }
+
+  const userId = await getCurrentUserId()
+  const profile = await prisma.profile.findUnique({ where: { userId } })
+  if (!profile) return { error: "Profile not found." }
+
+  const { type, focusX, focusY, zoom } = parsed.data
+  const image = await prisma.image.findFirst({
+    where: { profileId: profile.id, type },
+  })
+  if (!image) return { error: "Image not found." }
+
+  await prisma.image.update({
+    where: { id: image.id },
+    data: { focusX, focusY, zoom },
+  })
+
+  revalidatePath("/dashboard/profile")
+  revalidatePath(`/`)
+  revalidatePath(`/${profile.slug}`)
   return { success: true }
 }
 

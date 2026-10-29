@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { BadgeCheck, CalendarDays, MapPin, Music2, Zap } from "lucide-react"
+import { FocusedImage } from "@/components/shared/focused-image"
 import type { FullProfile, ProfileLink } from "@/types"
 import type { DeviceMode } from "@/components/shared/device-switcher"
 import { getActiveSinceYear } from "@/lib/utils"
@@ -45,7 +46,7 @@ export function ProfileLayout({ profile, mode }: Props) {
         <main id="profile" className={cn("min-w-0", t.panel, mainPad)}>
           <div className="relative overflow-hidden rounded-lg">
             <div className="relative h-28 overflow-hidden sm:h-36">
-              {banner ? <Image src={banner.url} alt="Profile banner" fill priority className="object-cover" /> : <div className={cn("h-full", t.bannerFallback)} />}
+              {banner ? <FocusedImage src={banner.url} alt="Profile banner" focusX={banner.focusX} focusY={banner.focusY} zoom={banner.zoom} sizes="(max-width: 640px) 100vw, 768px" priority /> : <div className={cn("h-full", t.bannerFallback)} />}
               <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
             </div>
 
@@ -54,7 +55,7 @@ export function ProfileLayout({ profile, mode }: Props) {
               <div className={cn("flex flex-wrap gap-4", responsive ? "w-full flex-col items-center justify-center md:w-auto md:flex-1 md:flex-row md:items-center md:justify-start" : wide ? "min-w-0 flex-1 flex-row items-center" : "w-full flex-col items-center")}>
               <div className={cn("relative h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md sm:h-[88px] sm:w-[88px]", responsive ? "-mt-10 sm:-mt-12 md:mt-0" : wide ? "mt-0" : "-mt-10 sm:-mt-12", t.avatarRing)}>
                 <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-700">
-                  {avatar ? <Image src={avatar.url} alt={profile.displayName ?? profile.slug} fill className="object-cover" /> : <div className="flex h-full items-center justify-center text-2xl font-black text-white/70">{(profile.displayName ?? profile.slug)[0]?.toUpperCase()}</div>}
+                  {avatar ? <FocusedImage src={avatar.url} alt={profile.displayName ?? profile.slug} focusX={avatar.focusX} focusY={avatar.focusY} zoom={avatar.zoom} sizes="128px" /> : <div className="flex h-full items-center justify-center text-2xl font-black text-white/70">{(profile.displayName ?? profile.slug)[0]?.toUpperCase()}</div>}
                 </div>
                 <DecorationOverlay id={decoration} size={88} />
                 <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
@@ -99,7 +100,7 @@ export function ProfileLayout({ profile, mode }: Props) {
               <div className={cn("flex items-center justify-between rounded-xl border p-3", t.border, t.soft)}><div><p className={cn("flex items-center gap-1 text-[9px] uppercase", t.muted)}><Zap className="h-3 w-3" />Active Since</p><p className="mt-1 text-sm font-bold">{activeSince}</p><p className={cn("text-[9px]", t.accent)}>★★★</p></div><span className={cn("text-lg", t.accent)}>✧</span></div>
             </div>
 
-            {gallery.length > 0 && <section id="gallery" className="px-4 pb-4"><div className="mb-2 flex items-center justify-between"><h2 className="text-xs font-semibold">Gallery</h2><span className={cn("text-[9px]", t.accent)}>View all →</span></div><div className={cn("grid gap-2", galleryGrid)}>{gallery.map((img, index) => img && <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg"><Image src={img.url} alt={`Gallery image ${index + 1}`} fill className="object-cover" /></div>)}</div></section>}
+            {gallery.length > 0 && <section id="gallery" className="px-4 pb-4"><div className="mb-2 flex items-center justify-between"><h2 className="text-xs font-semibold">Gallery</h2><span className={cn("text-[9px]", t.accent)}>View all →</span></div><div className={cn("grid gap-2", galleryGrid)}>{gallery.map((img, index) => img && <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg"><FocusedImage src={img.url} alt={`Gallery image ${index + 1}`} focusX={img.focusX} focusY={img.focusY} zoom={img.zoom} sizes="(max-width: 640px) 33vw, 384px" /></div>)}</div></section>}
 
             <section className="px-4 pb-4"><div className={cn("flex items-center gap-3 rounded-xl border p-3", t.border, t.soft)}>
               {profile.music?.albumArt ? <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full"><Image src={profile.music.albumArt} alt="Album cover" fill className="object-cover" /></div> : <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", t.soft)}><Music2 className={cn("h-4 w-4", t.accent)} /></div>}

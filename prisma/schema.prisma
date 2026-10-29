@@ -96,6 +96,11 @@ model Image {
   type      ImageType
   url       String
 
+  // ── Focal point + zoom (CSS-only framing; the source file is never modified) ──
+  focusX    Float     @default(50) // 0..100 — horizontal focal point, % of image width
+  focusY    Float     @default(50) // 0..100 — vertical focal point, % of image height
+  zoom      Float     @default(1)  // 1..3   — magnification of the crop window
+
   profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 

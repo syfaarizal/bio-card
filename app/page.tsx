@@ -15,7 +15,7 @@ async function getPublishedProfiles() {
       bio: true,
       tags: true,
       themeId: true,
-      images: { select: { type: true, url: true } },
+      images: { select: { type: true, url: true, focusX: true, focusY: true, zoom: true } },
     },
     orderBy: { updatedAt: "desc" },
     take: 6,

@@ -1,65 +1,96 @@
 "use client"
 
-import type { FullProfile } from "@/types"
+import { useState } from "react"
+import type { FullProfile, Image } from "@/types"
 import { UploadButton } from "@/components/shared/upload-button"
+import { FocalPointDialog } from "@/features/editor/focal-point-dialog"
+import { IMAGE_SLOTS, type ImageSlotType } from "@/lib/image-slots"
+import { DEFAULT_FOCUS_X, DEFAULT_FOCUS_Y, DEFAULT_ZOOM } from "@/lib/image-focus"
 
 interface Props {
   profile: FullProfile
   onUpdate: (updates: Partial<FullProfile>) => void
 }
 
-type SlotType = "PROFILE" | "BANNER" | "GALLERY_1" | "GALLERY_2" | "GALLERY_3"
-
-const SLOTS: { type: SlotType; label: string; hint: string }[] = [
-  { type: "PROFILE", label: "Profile Photo", hint: "Your main avatar image" },
-  { type: "BANNER", label: "Banner", hint: "Landscape banner behind your avatar" },
-  { type: "GALLERY_1", label: "Post 1", hint: "Gallery image 1" },
-  { type: "GALLERY_2", label: "Post 2", hint: "Gallery image 2" },
-  { type: "GALLERY_3", label: "Post 3", hint: "Gallery image 3" },
-]
-
 export function ImagesSection({ profile, onUpdate }: Props) {
-  type ImageItem = { id: string; profileId: string; type: string; url: string }
+  const [adjusting, setAdjusting] = useState<ImageSlotType | null>(null)
 
-  const getPhoto = (type: SlotType) =>
-    profile.images.find((img: ImageItem) => img.type === type)
+  const getPhoto = (type: ImageSlotType) =>
+    profile.images.find((img: Image) => img.type === type)
 
-  const handleUpload = (type: SlotType, url: string) => {
+  const handleUpload = (type: ImageSlotType, url: string) => {
     const updatedImages = [
-      ...profile.images.filter((img: ImageItem) => img.type !== type),
-      { id: `temp-${type}`, profileId: profile.id, type, url },
+      ...profile.images.filter((img: Image) => img.type !== type),
+      {
+        id: `temp-${type}`,
+        profileId: profile.id,
+        type,
+        url,
+        focusX: DEFAULT_FOCUS_X,
+        focusY: DEFAULT_FOCUS_Y,
+        zoom: DEFAULT_ZOOM,
+      },
     ]
     onUpdate({ images: updatedImages })
   }
 
-  const handleDelete = (type: SlotType) => {
-    const updatedImages = profile.images.filter((img: ImageItem) => img.type !== type)
+  const handleDelete = (type: ImageSlotType) => {
+    const updatedImages = profile.images.filter((img: Image) => img.type !== type)
     onUpdate({ images: updatedImages })
   }
 
+  const handleFocusSaved = (type: ImageSlotType, focus: { focusX: number; focusY: number; zoom: number }) => {
+    const updatedImages = profile.images.map((img: Image) =>
+      img.type === type ? { ...img, ...focus } : img
+    )
+    onUpdate({ images: updatedImages })
+  }
+
+  const adjustingSlot = IMAGE_SLOTS.find((slot) => slot.type === adjusting)
+  const adjustingPhoto = adjusting ? getPhoto(adjusting) : undefined
+
   return (
-    <section id="images" className="bg-white dark:bg-zinc-950 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 space-y-5 sm:p-5">
+    <section id="images" className="space-y-5 rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-zinc-800 dark:bg-zinc-950">
       <div>
         <h2 className="text-sm font-semibold text-gray-900 dark:text-zinc-50">Images</h2>
-        <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">
+        <p className="mt-0.5 text-xs text-gray-400 dark:text-zinc-500">
           Upload up to 5 images — profile photo, banner, and 3 gallery posts.
         </p>
       </div>
 
-      {SLOTS.map(({ type, label, hint }) => (
-        <div key={type}>
-          <div className="mb-1.5">
-            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400">{label}</label>
-            <p className="text-[10px] text-gray-400 dark:text-zinc-600">{hint}</p>
+      {IMAGE_SLOTS.map(({ type, label, hint }) => {
+        const photo = getPhoto(type)
+        return (
+          <div key={type}>
+            <div className="mb-1.5">
+              <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400">{label}</label>
+              <p className="text-[10px] text-gray-400 dark:text-zinc-600">{hint}</p>
+            </div>
+            <UploadButton
+              type={type}
+              currentUrl={photo?.url}
+              focus={photo ? { focusX: photo.focusX, focusY: photo.focusY, zoom: photo.zoom } : undefined}
+              onAdjust={photo ? () => setAdjusting(type) : undefined}
+              onUploadComplete={(url) => handleUpload(type, url)}
+              onDelete={() => handleDelete(type)}
+            />
           </div>
-          <UploadButton
-            type={type}
-            currentUrl={getPhoto(type)?.url}
-            onUploadComplete={(url) => handleUpload(type, url)}
-            onDelete={() => handleDelete(type)}
-          />
-        </div>
-      ))}
+        )
+      })}
+
+      {adjustingSlot && adjustingPhoto && (
+        <FocalPointDialog
+          slot={adjustingSlot}
+          src={adjustingPhoto.url}
+          initial={{
+            focusX: adjustingPhoto.focusX,
+            focusY: adjustingPhoto.focusY,
+            zoom: adjustingPhoto.zoom,
+          }}
+          onSaved={handleFocusSaved}
+          onClose={() => setAdjusting(null)}
+        />
+      )}
     </section>
   )
 }

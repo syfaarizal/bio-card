@@ -3,11 +3,11 @@
 import { useUploadThing } from "@/lib/uploadthing-client"
 import { saveImage, deleteImage } from "@/actions/profile"
 import { cn } from "@/lib/utils"
-import { ImagePlus, Loader2, Trash2 } from "lucide-react"
-import Image from "next/image"
+import { ImagePlus, Loader2, Trash2, Crosshair } from "lucide-react"
 import { useState } from "react"
-
-type ImageSlotType = "PROFILE" | "BANNER" | "GALLERY_1" | "GALLERY_2" | "GALLERY_3"
+import { FocusedImage } from "@/components/shared/focused-image"
+import type { ImageSlotType } from "@/lib/image-slots"
+import type { ImageFocusValues } from "@/lib/image-focus"
 
 // Legacy support for old MAIN/SECONDARY refs during migration
 type AllowedType = ImageSlotType | "MAIN" | "SECONDARY"
@@ -15,18 +15,10 @@ type AllowedType = ImageSlotType | "MAIN" | "SECONDARY"
 interface UploadButtonProps {
   type: AllowedType
   currentUrl?: string | null
+  focus?: ImageFocusValues
+  onAdjust?: () => void
   onUploadComplete: (url: string) => void
   onDelete: () => void
-}
-
-const ASPECT: Record<AllowedType, string> = {
-  PROFILE: "aspect-square",
-  BANNER: "aspect-[3/1]",
-  GALLERY_1: "aspect-square",
-  GALLERY_2: "aspect-square",
-  GALLERY_3: "aspect-square",
-  MAIN: "aspect-square",
-  SECONDARY: "aspect-square",
 }
 
 const HEIGHT: Record<AllowedType, string> = {
@@ -39,7 +31,20 @@ const HEIGHT: Record<AllowedType, string> = {
   SECONDARY: "h-28",
 }
 
-export function UploadButton({ type, currentUrl, onUploadComplete, onDelete }: UploadButtonProps) {
+function toDbType(type: AllowedType): ImageSlotType {
+  if (type === "MAIN") return "PROFILE"
+  if (type === "SECONDARY") return "GALLERY_1"
+  return type
+}
+
+export function UploadButton({
+  type,
+  currentUrl,
+  focus,
+  onAdjust,
+  onUploadComplete,
+  onDelete,
+}: UploadButtonProps) {
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -47,9 +52,7 @@ export function UploadButton({ type, currentUrl, onUploadComplete, onDelete }: U
     onClientUploadComplete: async (res) => {
       const url = res[0]?.ufsUrl ?? res[0]?.url
       if (!url) return
-      // Map legacy types to new schema
-      const dbType = type === "MAIN" ? "PROFILE" : type === "SECONDARY" ? "GALLERY_1" : type
-      await saveImage(dbType as ImageSlotType, url)
+      await saveImage(toDbType(type), url)
       onUploadComplete(url)
       setUploading(false)
     },
@@ -73,32 +76,42 @@ export function UploadButton({ type, currentUrl, onUploadComplete, onDelete }: U
   }
 
   const handleDelete = async () => {
-    const dbType = type === "MAIN" ? "PROFILE" : type === "SECONDARY" ? "GALLERY_1" : type
-    await deleteImage(dbType as ImageSlotType)
+    await deleteImage(toDbType(type))
     onDelete()
   }
 
   const heightClass = HEIGHT[type] ?? "h-28"
-  const isBanner = type === "BANNER"
 
   return (
     <div className="space-y-2">
       {currentUrl ? (
         <div className="relative group w-full">
           <div className={cn("relative w-full overflow-hidden rounded-xl border border-gray-200 dark:border-zinc-800", heightClass)}>
-            <Image
+            <FocusedImage
               src={currentUrl}
               alt={type}
-              fill
-              className={cn("object-cover", isBanner ? "object-center" : "object-cover")}
+              focusX={focus?.focusX}
+              focusY={focus?.focusY}
+              zoom={focus?.zoom}
+              sizes="384px"
             />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-              <label className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-gray-900 text-xs font-medium hover:bg-gray-100 transition-colors">
+            <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+              <label className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-gray-900 transition-colors hover:bg-gray-100">
                 <ImagePlus className="w-3.5 h-3.5" />
                 Replace
                 <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFileChange} disabled={uploading} />
               </label>
-              <button onClick={handleDelete} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition-colors">
+              {onAdjust && (
+                <button
+                  type="button"
+                  onClick={onAdjust}
+                  className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-gray-900 transition-colors hover:bg-gray-100"
+                >
+                  <Crosshair className="w-3.5 h-3.5" />
+                  Adjust
+                </button>
+              )}
+              <button onClick={handleDelete} className="flex items-center gap-1.5 rounded-lg bg-red-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-red-600">
                 <Trash2 className="w-3.5 h-3.5" />
                 Remove
               </button>
@@ -107,15 +120,15 @@ export function UploadButton({ type, currentUrl, onUploadComplete, onDelete }: U
         </div>
       ) : (
         <label className={cn(
-          "flex flex-col items-center justify-center gap-2 w-full rounded-xl border border-dashed cursor-pointer transition-colors",
+          "flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed transition-colors",
           heightClass,
           uploading
-            ? "border-gray-300 bg-gray-50 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-900"
+            ? "cursor-not-allowed border-gray-300 bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900"
             : "border-gray-300 hover:border-gray-400 hover:bg-gray-50 dark:border-zinc-800 dark:hover:border-zinc-600 dark:hover:bg-zinc-900"
         )}>
           {uploading ? (
             <>
-              <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
               <span className="text-xs text-gray-400">Uploading…</span>
             </>
           ) : (
@@ -129,7 +142,7 @@ export function UploadButton({ type, currentUrl, onUploadComplete, onDelete }: U
         </label>
       )}
       {error && (
-        <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+        <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>
       )}
     </div>
   )

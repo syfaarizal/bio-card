@@ -2,6 +2,7 @@ import { z } from "zod"
 import { isReservedSlug } from "./reserved-slugs"
 import { normalizeSpotifyTrackUrl } from "./spotify"
 import { normalizeUrl, validateUrl } from "./links/detect"
+import { IMAGE_SLOT_TYPES } from "./image-slots"
 
 const usernameRegex = /^[a-z0-9_-]+$/
 
@@ -82,6 +83,13 @@ export const linkSchema = z.object({
   provider: z.string().optional(),
 })
 
+export const imageFocusSchema = z.object({
+  type: z.enum(IMAGE_SLOT_TYPES),
+  focusX: z.number().min(0).max(100),
+  focusY: z.number().min(0).max(100),
+  zoom: z.number().min(1).max(3),
+})
+
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
@@ -90,3 +98,4 @@ export type ProfileIdentityInput = z.infer<typeof profileIdentitySchema>
 export type SocialLinksInput = z.infer<typeof socialLinksSchema>
 export type MusicInput = z.infer<typeof musicSchema>
 export type LinkInput = z.infer<typeof linkSchema>
+export type ImageFocusInput = z.infer<typeof imageFocusSchema>

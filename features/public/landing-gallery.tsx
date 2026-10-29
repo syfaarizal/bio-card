@@ -1,8 +1,8 @@
 "use client"
 
 import { motion } from "motion/react"
-import Image from "next/image"
 import Link from "next/link"
+import { FocusedImage } from "@/components/shared/focused-image"
 import { cn } from "@/lib/utils"
 import { ArrowUpRight } from "lucide-react"
 
@@ -12,7 +12,7 @@ interface ProfileCard {
   bio: string | null
   tags: string[]
   themeId: string
-  images: { type: string; url: string }[]
+  images: { type: string; url: string; focusX: number; focusY: number; zoom: number }[]
 }
 
 interface Props {
@@ -78,7 +78,7 @@ export function LandingGallery({ profiles }: Props) {
                     {/* Avatar */}
                     <div className="relative w-11 h-11 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
                       {mainPhoto ? (
-                        <Image src={mainPhoto.url} alt={profile.displayName ?? profile.slug} fill className="object-cover" />
+                        <FocusedImage src={mainPhoto.url} alt={profile.displayName ?? profile.slug} focusX={mainPhoto.focusX} focusY={mainPhoto.focusY} zoom={mainPhoto.zoom} sizes="44px" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <span className={cn("text-lg font-black opacity-30", THEME_MUTED[themeId])}>
