@@ -9,7 +9,6 @@ import { ImagesSection } from "./sections/images-section"
 import { ThemeSection } from "./sections/theme-section"
 import { DecorationSection } from "./sections/decoration-section"
 import { ProfilePreview } from "@/features/preview/profile-preview"
-import { DeviceSwitcher, type DeviceMode } from "@/components/shared/device-switcher"
 
 interface ProfileEditorProps {
   profile: FullProfile
@@ -17,7 +16,6 @@ interface ProfileEditorProps {
 
 export function ProfileEditor({ profile }: ProfileEditorProps) {
   const [liveProfile, setLiveProfile] = useState<FullProfile>(profile)
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>("desktop")
 
   const updatePreview = (updates: Partial<FullProfile>) => {
     setLiveProfile((prev: FullProfile) => ({ ...prev, ...updates }))
@@ -51,21 +49,11 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Live Preview</span>
           </div>
-          <DeviceSwitcher current={deviceMode} onChange={setDeviceMode} />
+          <span className="text-xs text-gray-400 dark:text-zinc-500">390px · mobile</span>
         </div>
 
         <div className="flex min-h-[520px] flex-1 items-start justify-center overflow-auto rounded-xl bg-gray-100 p-3 dark:bg-zinc-900 sm:p-4">
-          <div
-            className="transition-all duration-300 w-full"
-            style={{
-              maxWidth:
-                deviceMode === "mobile" ? "390px"
-                : deviceMode === "tablet" ? "768px"
-                : "100%",
-            }}
-          >
-            <ProfilePreview profile={liveProfile} deviceMode={deviceMode} />
-          </div>
+          <ProfilePreview profile={liveProfile} />
         </div>
       </div>
     </div>

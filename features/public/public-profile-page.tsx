@@ -8,11 +8,7 @@ interface Props {
 }
 
 export function PublicProfilePage({ profile }: Props) {
-  return (
-    // On phones and tablets the card fills the viewport edge to edge; on
-    // desktop it keeps the page padding and its natural height.
-    <div className="min-h-dvh bg-gray-950 lg:min-h-screen lg:p-3">
-      <ProfileLayout profile={profile} mode="responsive" fillHeight />
-    </div>
-  )
+  // The theme backdrop fills the viewport; the card stays portrait and
+  // centred. There is no separate desktop layout — see ADR 006.
+  return <ProfileLayout profile={profile} />
 }

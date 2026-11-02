@@ -7,16 +7,16 @@ import type { FullProfile } from "@/types"
 
 const THEME_COLORS: Record<string, string> = {
   default: "#ffffff",
-  midnight: "#0f0f1a",
-  rose: "#fff1f2",
-  cyber: "#020617",
-  glass: "#f8faff",
+  midnight: "#0d0f16",
+  rose: "#ffffff",
+  cyber: "#080e19",
+  glass: "#f5f3ff",
 }
 
 const THEME_DOT_COLORS: Record<string, string> = {
-  default: "#111111",
-  midnight: "#a5b4fc",
-  rose: "#be185d",
+  default: "#111827",
+  midnight: "#818cf8",
+  rose: "#e11d48",
   cyber: "#22d3ee",
   glass: "#7c3aed",
 }

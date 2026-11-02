@@ -20,27 +20,27 @@ interface Props {
 }
 
 const THEME_CARD: Record<string, string> = {
-  default: "bg-white border-gray-200 text-gray-900",
-  midnight: "bg-[#0f0f1a] border-[#2a2a45] text-[#e2e8f0]",
-  rose: "bg-[#fff1f2] border-[#fecdd3] text-[#1f1f1f]",
-  cyber: "bg-[#020617] border-[#1e3a5f] text-[#e2f8ff]",
-  glass: "bg-white/80 border-white/40 backdrop-blur-sm text-[#1e1b4b]",
+  default: "bg-[var(--theme-panel)] border-[var(--theme-border)] text-[var(--theme-text)]",
+  midnight: "bg-[var(--theme-panel)] border-[var(--theme-border)] text-[var(--theme-text)]",
+  rose: "bg-[var(--theme-panel)] border-[var(--theme-border)] text-[var(--theme-text)]",
+  cyber: "bg-[var(--theme-panel)] border-[var(--theme-border)] text-[var(--theme-text)]",
+  glass: "bg-[var(--theme-panel)] border-[var(--theme-border)] text-[var(--theme-text)]",
 }
 
 const THEME_MUTED: Record<string, string> = {
-  default: "text-gray-400",
-  midnight: "text-[#64748b]",
-  rose: "text-[#9f9f9f]",
-  cyber: "text-[#4a6a8a]",
-  glass: "text-[#6b7280]",
+  default: "text-[var(--theme-muted)]",
+  midnight: "text-[var(--theme-muted)]",
+  rose: "text-[var(--theme-muted)]",
+  cyber: "text-[var(--theme-muted)]",
+  glass: "text-[var(--theme-muted)]",
 }
 
 const THEME_TAG: Record<string, string> = {
-  default: "bg-gray-100 text-gray-600",
-  midnight: "bg-[#1e1e40] text-[#a5b4fc]",
-  rose: "bg-[#ffe4e6] text-[#be185d]",
-  cyber: "bg-[#0c1524] text-[#22d3ee]",
-  glass: "bg-[#ede9fe] text-[#7c3aed]",
+  default: "bg-[var(--theme-soft)] text-[var(--theme-accent)]",
+  midnight: "bg-[var(--theme-soft)] text-[var(--theme-accent)]",
+  rose: "bg-[var(--theme-soft)] text-[var(--theme-accent)]",
+  cyber: "bg-[var(--theme-soft)] text-[var(--theme-accent)]",
+  glass: "bg-[var(--theme-soft)] text-[var(--theme-accent)]",
 }
 
 const fadeUp = {
@@ -67,6 +67,7 @@ export function LandingGallery({ profiles }: Props) {
           <motion.div key={profile.slug} variants={fadeUp} transition={{ duration: 0.4, ease: "easeOut" }}>
             <Link href={`/${profile.slug}`} className="group block">
               <div
+                data-theme={themeId}
                 className={cn(
                   "rounded-2xl border p-5 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5",
                   THEME_CARD[themeId] ?? THEME_CARD.default

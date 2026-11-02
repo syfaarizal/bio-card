@@ -2,126 +2,222 @@ import Image from "next/image"
 import { BadgeCheck, CalendarDays, MapPin, Music2, Zap } from "lucide-react"
 import { FocusedImage } from "@/components/shared/focused-image"
 import type { FullProfile, ProfileLink } from "@/types"
-import type { DeviceMode } from "@/components/shared/device-switcher"
+import { THEMES } from "@/types"
 import { getActiveSinceYear } from "@/lib/utils"
 import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar-decoration"
 import { BrandIcon } from "@/components/shared/brand-icon"
-import { cn } from "@/lib/utils"
-
-type LayoutMode = DeviceMode | "responsive"
 
 interface Props {
   profile: FullProfile
-  mode: LayoutMode
-  /** Fill the viewport height — used on the public page so the card is not a half-height strip on phones and tablets. */
-  fillHeight?: boolean
 }
 
-const THEMES: Record<string, { page: string; panel: string; muted: string; accent: string; border: string; soft: string; identity: string; bannerFallback: string; avatarRing: string }> = {
-  default: { page: "bg-gray-100", panel: "bg-white", muted: "text-gray-500", accent: "text-gray-900", border: "border-gray-200", soft: "bg-gray-50", identity: "text-gray-900", bannerFallback: "bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900", avatarRing: "bg-gray-800" },
-  midnight: { page: "bg-[#08090e]", panel: "bg-[#0d0f16]", muted: "text-slate-400", accent: "text-indigo-400", border: "border-slate-800", soft: "bg-[#151923]", identity: "text-slate-100", bannerFallback: "bg-gradient-to-r from-indigo-950 via-slate-900 to-violet-950", avatarRing: "bg-indigo-500" },
-  rose: { page: "bg-rose-50", panel: "bg-white", muted: "text-rose-500", accent: "text-rose-600", border: "border-rose-200", soft: "bg-rose-50", identity: "text-gray-900", bannerFallback: "bg-gradient-to-r from-rose-950 via-rose-900 to-pink-950", avatarRing: "bg-rose-500" },
-  cyber: { page: "bg-[#050914]", panel: "bg-[#080e19]", muted: "text-slate-400", accent: "text-cyan-400", border: "border-cyan-950", soft: "bg-[#0e1724]", identity: "text-slate-100", bannerFallback: "bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950", avatarRing: "bg-cyan-400" },
-  glass: { page: "bg-violet-50", panel: "bg-white/70", muted: "text-violet-500", accent: "text-violet-600", border: "border-violet-200", soft: "bg-violet-50/70", identity: "text-violet-950", bannerFallback: "bg-gradient-to-r from-violet-950 via-indigo-900 to-purple-950", avatarRing: "bg-violet-600" },
-}
-
-export function ProfileLayout({ profile, mode, fillHeight = false }: Props) {
-  const simulatedMobile = mode === "mobile"
-  const responsive = mode === "responsive"
-  const wide = !simulatedMobile
-  const t = THEMES[profile.themeId ?? "default"] ?? THEMES.default
+/**
+ * The profile card. One layout, portrait only, always one column — see
+ * docs/adr/006-mobile-first-portrait-preview.md.
+ *
+ * Width-dependent styling uses container queries (`@container` / `@sm:`) on the
+ * card, never viewport breakpoints, so the card adapts to the space it is
+ * given instead of to the width of the window that happens to contain it.
+ * That is what makes the editor preview (390px iframe) and the public page
+ * agree.
+ */
+export function ProfileLayout({ profile }: Props) {
+  const themeId = THEMES.some((t) => t.id === profile.themeId) ? profile.themeId! : "default"
   const images = profile.images ?? []
   const image = (type: string) => images.find((item) => item.type === type)
   const avatar = image("PROFILE")
   const banner = image("BANNER")
   const gallery = [image("GALLERY_1"), image("GALLERY_2"), image("GALLERY_3")].filter(Boolean)
-  const links = (profile.profileLinks ?? []).filter((link: ProfileLink) => link.isActive).sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
+  const links = (profile.profileLinks ?? [])
+    .filter((link: ProfileLink) => link.isActive)
+    .sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
   const activeSince = getActiveSinceYear(profile.createdAt)
   const decoration = (profile.profileEffect ?? "none") as DecorationId
-  // Mobile and tablet go edge to edge; padding returns at desktop.
-  const mainPad = fillHeight ? "p-0 lg:p-3" : responsive ? "p-2 md:p-3" : wide ? "p-3" : "p-2"
-  const statsGrid = "grid-cols-2"
-  const galleryGrid = "grid-cols-3"
 
   return (
-    <div
-      className={cn(
-        "w-full overflow-hidden",
-        fillHeight
-          ? "flex min-h-dvh flex-col rounded-none border-0 shadow-none lg:min-h-0 lg:rounded-lg lg:border lg:shadow-sm"
-          : "min-h-[420px] rounded-lg border shadow-sm",
-        t.page,
-        t.border
-      )}
-    >
-      <div className={cn(fillHeight ? "flex flex-1 flex-col" : "min-h-[inherit]")}>
-        <main id="profile" className={cn("min-w-0", fillHeight && "flex flex-1 flex-col", t.panel, mainPad)}>
-          <div className={cn("relative overflow-hidden", fillHeight ? "rounded-none lg:rounded-lg" : "rounded-lg")}>
-            <div className="relative h-28 overflow-hidden sm:h-36">
-              {banner ? <FocusedImage src={banner.url} alt="Profile banner" focusX={banner.focusX} focusY={banner.focusY} zoom={banner.zoom} sizes="(max-width: 640px) 100vw, 768px" priority /> : <div className={cn("h-full", t.bannerFallback)} />}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
-            </div>
+    <div data-theme={themeId} className="flex min-h-dvh w-full bg-[var(--theme-page)]">
+      {/* Auto margins centre the card and collapse to zero when the content
+          is taller than the viewport, so the top of the card never becomes
+          unreachable. */}
+      <div className="mx-auto my-auto w-full max-w-md px-3 py-4">
+        <article className="@container flex flex-col overflow-hidden rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-panel)] shadow-sm">
+          {/* ── Banner ── */}
+          <div className="relative h-28 overflow-hidden @sm:h-36">
+            {banner ? (
+              <FocusedImage
+                src={banner.url}
+                alt="Profile banner"
+                focusX={banner.focusX}
+                focusY={banner.focusY}
+                zoom={banner.zoom}
+                sizes="(max-width: 640px) 100vw, 448px"
+                priority
+              />
+            ) : (
+              <div className="h-full w-full" style={{ background: "var(--theme-banner)" }} />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
+          </div>
 
-            <div className={cn("relative -mt-7 rounded-t-[28px]", t.panel)}>
-            <div className={cn("relative flex flex-col gap-3 px-4 py-4", responsive ? "items-center md:flex-row md:items-start md:justify-between md:gap-6 md:px-6" : wide ? "flex-row items-start justify-between gap-6" : "items-center")}>
-              <div className={cn("flex flex-wrap gap-4", responsive ? "w-full flex-col items-center justify-center md:w-auto md:flex-1 md:flex-row md:items-center md:justify-start" : wide ? "min-w-0 flex-1 flex-row items-center" : "w-full flex-col items-center")}>
-              <div className={cn("relative h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md sm:h-[88px] sm:w-[88px]", responsive ? "-mt-10 sm:-mt-12 md:mt-0" : wide ? "mt-0" : "-mt-10 sm:-mt-12", t.avatarRing)}>
+          {/* ── Identity ── */}
+          <div
+            className="-mt-7 rounded-t-[28px] bg-[var(--theme-panel)]"
+            style={{ backdropFilter: "blur(var(--theme-panel-blur))" }}
+          >
+            <div className="flex flex-col items-center gap-3 px-4 pt-4">
+              <div className="relative h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md @sm:h-[88px] @sm:w-[88px]" style={{ background: "var(--theme-ring)" }}>
                 <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-700">
-                  {avatar ? <FocusedImage src={avatar.url} alt={profile.displayName ?? profile.slug} focusX={avatar.focusX} focusY={avatar.focusY} zoom={avatar.zoom} sizes="128px" /> : <div className="flex h-full items-center justify-center text-2xl font-black text-white/70">{(profile.displayName ?? profile.slug)[0]?.toUpperCase()}</div>}
+                  {avatar ? (
+                    <FocusedImage
+                      src={avatar.url}
+                      alt={profile.displayName ?? profile.slug}
+                      focusX={avatar.focusX}
+                      focusY={avatar.focusY}
+                      zoom={avatar.zoom}
+                      sizes="128px"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-2xl font-black text-white/70">
+                      {(profile.displayName ?? profile.slug)[0]?.toUpperCase()}
+                    </div>
+                  )}
                 </div>
                 <DecorationOverlay id={decoration} size={88} />
                 <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
               </div>
-              <div className={cn("min-w-0 flex-1", simulatedMobile && "text-center", responsive && "text-center md:text-left")}>
-                <p className={cn("text-[10px] font-semibold tracking-widest", t.accent)}>@{profile.slug}</p>
-                <h1 className={cn("truncate text-xl font-bold", t.identity, responsive ? "md:text-white" : wide ? "text-white" : "")}>{profile.displayName ?? profile.slug}{profile.verifiedBadge && <BadgeCheck className={cn("ml-1 inline h-4 w-4", t.accent)} />}</h1>
-                <p className={cn("truncate text-xs", t.muted)}>{profile.bio ?? "Add a short bio to introduce yourself."}</p>
-                <div className={cn("mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px]", responsive ? "justify-center md:justify-start" : simulatedMobile ? "justify-center" : "")}>
-                  {profile.location && <p className={cn("flex items-center gap-1", t.accent)}><MapPin className="h-3 w-3" />{profile.location}</p>}
-                  <p className={cn("flex items-center gap-1", t.muted)}><Zap className="h-3 w-3" />Active since {activeSince} <span className={t.accent}>★★★</span></p>
+
+              <div className="w-full min-w-0 text-center">
+                <p className="text-[10px] font-semibold tracking-widest text-[var(--theme-accent)]">@{profile.slug}</p>
+                <h1 className="truncate text-xl font-bold text-[var(--theme-text)]">
+                  {profile.displayName ?? profile.slug}
+                  {profile.verifiedBadge && <BadgeCheck className="ml-1 inline h-4 w-4 text-[var(--theme-accent)]" />}
+                </h1>
+                <p className="truncate text-xs text-[var(--theme-muted)]">{profile.bio ?? "Add a short bio to introduce yourself."}</p>
+                <div className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px]">
+                  {profile.location && (
+                    <p className="flex items-center gap-1 text-[var(--theme-accent)]">
+                      <MapPin className="h-3 w-3" />
+                      {profile.location}
+                    </p>
+                  )}
+                  <p className="flex items-center gap-1 text-[var(--theme-muted)]">
+                    <Zap className="h-3 w-3" />
+                    Active since {activeSince} <span className="text-[var(--theme-accent)]">★★★</span>
+                  </p>
                 </div>
               </div>
-              </div>
+            </div>
 
-              <div className={cn("flex flex-col gap-2", responsive ? "w-full items-center md:w-auto md:shrink-0 md:items-end" : wide ? "shrink-0 items-end" : "w-full items-center")}>
-              {(profile.tags?.length ?? 0) > 0 && (
-                <div className={cn("flex flex-wrap gap-1.5", responsive ? "justify-center md:justify-end" : wide ? "justify-end" : "justify-center")}>
-                  {(profile.tags ?? []).slice(0, 4).map((tag) => (
-                    <span key={tag} className={cn("rounded-full border px-2.5 py-1 text-[9px] font-medium", t.border, t.soft, t.accent)}>{tag}</span>
-                  ))}
+            {(profile.tags?.length ?? 0) > 0 && (
+              <div className="flex flex-wrap justify-center gap-1.5 px-4 pt-4">
+                {(profile.tags ?? []).slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-[var(--theme-border)] bg-[var(--theme-soft)] px-2.5 py-1 text-[9px] font-medium text-[var(--theme-accent)]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {links.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-2 px-4 pt-4">
+                {links.slice(0, 6).map((link) => (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    title={link.title}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--theme-border)] bg-[var(--theme-soft)] text-[var(--theme-accent)] transition-transform hover:scale-105"
+                  >
+                    <BrandIcon provider={link.provider} className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            )}
+
+            <div className="mx-4 my-4 border-t border-[var(--theme-border)]" />
+
+            {/* ── Stats ── */}
+            <div className="grid grid-cols-2 gap-3 px-4">
+              {profile.birthday && (
+                <div className="flex items-center justify-between rounded-xl border border-[var(--theme-border)] bg-[var(--theme-soft)] p-3">
+                  <div>
+                    <p className="flex items-center gap-1 text-[9px] uppercase text-[var(--theme-muted)]">
+                      <CalendarDays className="h-3 w-3" />
+                      Birthday
+                    </p>
+                    <p className="mt-1 text-sm font-bold">{new Date(profile.birthday).getUTCDate()}</p>
+                    <p className="text-[9px] text-[var(--theme-muted)]">
+                      {new Date(profile.birthday).toLocaleString("en-US", { month: "long", timeZone: "UTC" })}{" "}
+                      {new Date(profile.birthday).getUTCFullYear()}
+                    </p>
+                  </div>
+                  <span className="text-lg text-[var(--theme-accent)]">✦</span>
                 </div>
               )}
-
-              {links.length > 0 && (
-                <div className={cn("flex flex-wrap items-center gap-2", responsive ? "justify-center md:justify-end" : wide ? "justify-end" : "justify-center")}>
-                  {links.slice(0, 6).map((link) => (
-                    <a key={link.id} href={link.url} title={link.title} target="_blank" rel="noreferrer" className={cn("flex h-9 w-9 items-center justify-center rounded-full border transition-transform hover:scale-105", t.border, t.soft, t.accent)}>
-                      <BrandIcon provider={link.provider} className="h-4 w-4" />
-                    </a>
-                  ))}
+              <div className="flex items-center justify-between rounded-xl border border-[var(--theme-border)] bg-[var(--theme-soft)] p-3">
+                <div>
+                  <p className="flex items-center gap-1 text-[9px] uppercase text-[var(--theme-muted)]">
+                    <Zap className="h-3 w-3" />
+                    Active Since
+                  </p>
+                  <p className="mt-1 text-sm font-bold">{activeSince}</p>
+                  <p className="text-[9px] text-[var(--theme-accent)]">★★★</p>
                 </div>
-              )}
+                <span className="text-lg text-[var(--theme-accent)]">✧</span>
               </div>
             </div>
 
-            </div>
-            <div className={cn("mx-4 mb-4 border-t", t.border)} />
+            {/* ── Gallery ── */}
+            {gallery.length > 0 && (
+              <section id="gallery" className="px-4 pt-4">
+                <h2 className="mb-2 flex items-center justify-between text-xs font-semibold">Gallery</h2>
+                <div className="grid grid-cols-3 gap-2">
+                  {gallery.map((img, index) =>
+                    img ? (
+                      <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg">
+                        <FocusedImage
+                          src={img.url}
+                          alt={`Gallery image ${index + 1}`}
+                          focusX={img.focusX}
+                          focusY={img.focusY}
+                          zoom={img.zoom}
+                          sizes="(max-width: 640px) 33vw, 150px"
+                        />
+                      </div>
+                    ) : null,
+                  )}
+                </div>
+              </section>
+            )}
 
-            <div className={cn("grid gap-3 px-4 pb-4", statsGrid)}>
-              {profile.birthday && <div className={cn("flex items-center justify-between rounded-xl border p-3", t.border, t.soft)}><div><p className={cn("flex items-center gap-1 text-[9px] uppercase", t.muted)}><CalendarDays className="h-3 w-3" />Birthday</p><p className="mt-1 text-sm font-bold">{new Date(profile.birthday).getUTCDate()}</p><p className={cn("text-[9px]", t.muted)}>{new Date(profile.birthday).toLocaleString("en-US", { month: "long", timeZone: "UTC" })} {new Date(profile.birthday).getUTCFullYear()}</p></div><span className={cn("text-lg", t.accent)}>✦</span></div>}
-              <div className={cn("flex items-center justify-between rounded-xl border p-3", t.border, t.soft)}><div><p className={cn("flex items-center gap-1 text-[9px] uppercase", t.muted)}><Zap className="h-3 w-3" />Active Since</p><p className="mt-1 text-sm font-bold">{activeSince}</p><p className={cn("text-[9px]", t.accent)}>★★★</p></div><span className={cn("text-lg", t.accent)}>✧</span></div>
-            </div>
+            {/* ── Now playing ── */}
+            <section className="px-4 pt-4">
+              <div className="flex items-center gap-3 rounded-xl border border-[var(--theme-border)] bg-[var(--theme-soft)] p-3">
+                {profile.music?.albumArt ? (
+                  <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                    <Image src={profile.music.albumArt} alt="Album cover" fill className="object-cover" />
+                  </div>
+                ) : (
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--theme-soft)]">
+                    <Music2 className="h-4 w-4 text-[var(--theme-accent)]" />
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-[8px] font-bold uppercase tracking-wider text-[var(--theme-accent)]">Now Playing</p>
+                  <p className="truncate text-[10px] font-semibold">{profile.music?.songTitle ?? "Add a Spotify track"}</p>
+                  <p className="truncate text-[9px] text-[var(--theme-muted)]">{profile.music?.artistName ?? "Spotify"}</p>
+                </div>
+                <span className="text-sm text-[var(--theme-accent)]">▷</span>
+              </div>
+            </section>
 
-            {gallery.length > 0 && <section id="gallery" className="px-4 pb-4"><div className="mb-2 flex items-center justify-between"><h2 className="text-xs font-semibold">Gallery</h2></div><div className={cn("grid gap-2", galleryGrid)}>{gallery.map((img, index) => img && <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg"><FocusedImage src={img.url} alt={`Gallery image ${index + 1}`} focusX={img.focusX} focusY={img.focusY} zoom={img.zoom} sizes="(max-width: 640px) 33vw, 384px" /></div>)}</div></section>}
-
-            <section className="px-4 pb-4"><div className={cn("flex items-center gap-3 rounded-xl border p-3", t.border, t.soft)}>
-              {profile.music?.albumArt ? <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full"><Image src={profile.music.albumArt} alt="Album cover" fill className="object-cover" /></div> : <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", t.soft)}><Music2 className={cn("h-4 w-4", t.accent)} /></div>}
-              <div className="min-w-0 flex-1"><p className={cn("text-[8px] font-bold uppercase tracking-wider", t.accent)}>Now Playing</p><p className="truncate text-[10px] font-semibold">{profile.music?.songTitle ?? "Add a Spotify track"}</p><p className={cn("truncate text-[9px]", t.muted)}>{profile.music?.artistName ?? "Spotify"}</p></div>
-              <span className={cn("text-sm", t.accent)}>▷</span>
-            </div></section>
+            <p className="py-4 text-center text-[9px] text-[var(--theme-muted)]">Made with BioCard</p>
           </div>
-          <p className={cn("py-3 text-center text-[9px]", t.muted, fillHeight && "mt-auto pt-6")}>Made with BioCard</p>
-        </main>
+        </article>
       </div>
     </div>
   )
