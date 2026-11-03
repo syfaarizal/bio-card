@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { BadgeCheck, CalendarDays, MapPin, Music2, Zap } from "lucide-react"
+import { AudioLines, BadgeCheck, CalendarDays, MapPin, Music2, Zap } from "lucide-react"
 import { FocusedImage } from "@/components/shared/focused-image"
 import type { FullProfile, ProfileLink } from "@/types"
 import { THEMES } from "@/types"
@@ -200,7 +200,7 @@ export function ProfileLayout({ profile }: Props) {
                   <p className="truncate text-[10px] font-semibold">{profile.music?.songTitle ?? "Add a Spotify track"}</p>
                   <p className="truncate text-[9px] text-[var(--theme-muted)]">{profile.music?.artistName ?? "Spotify"}</p>
                 </div>
-                <span className="text-sm text-[var(--theme-accent)]">▷</span>
+                <AudioLines className="h-4 w-4 mr-3 shrink-0 text-[var(--theme-accent)]" aria-hidden />
               </div>
             </section>
 
