@@ -6,6 +6,7 @@ import { THEMES } from "@/types"
 import { getActiveSinceYear } from "@/lib/utils"
 import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar-decoration"
 import { BrandIcon } from "@/components/shared/brand-icon"
+import { GalleryLightbox } from "@/features/shared/gallery-lightbox"
 
 interface Props {
   profile: FullProfile
@@ -27,7 +28,9 @@ export function ProfileLayout({ profile }: Props) {
   const image = (type: string) => images.find((item) => item.type === type)
   const avatar = image("PROFILE")
   const banner = image("BANNER")
-  const gallery = [image("GALLERY_1"), image("GALLERY_2"), image("GALLERY_3")].filter(Boolean)
+  const gallery = [image("GALLERY_1"), image("GALLERY_2"), image("GALLERY_3")].filter(
+    (item): item is NonNullable<typeof item> => Boolean(item),
+  )
   const links = (profile.profileLinks ?? [])
     .filter((link: ProfileLink) => link.isActive)
     .sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
@@ -175,22 +178,7 @@ export function ProfileLayout({ profile }: Props) {
             {gallery.length > 0 && (
               <section id="gallery" className="px-4 pt-4">
                 <h2 className="mb-2 flex items-center justify-between text-xs font-semibold">Gallery</h2>
-                <div className="grid grid-cols-3 gap-2">
-                  {gallery.map((img, index) =>
-                    img ? (
-                      <div key={img.id ?? index} className="relative aspect-[1.35] overflow-hidden rounded-lg">
-                        <FocusedImage
-                          src={img.url}
-                          alt={`Gallery image ${index + 1}`}
-                          focusX={img.focusX}
-                          focusY={img.focusY}
-                          zoom={img.zoom}
-                          sizes="(max-width: 640px) 33vw, 150px"
-                        />
-                      </div>
-                    ) : null,
-                  )}
-                </div>
+                <GalleryLightbox images={gallery} themeId={themeId} />
               </section>
             )}
 
