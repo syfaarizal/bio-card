@@ -3,6 +3,7 @@ import { isReservedSlug } from "./reserved-slugs"
 import { normalizeSpotifyTrackUrl } from "./spotify"
 import { normalizeUrl, validateUrl } from "./links/detect"
 import { IMAGE_SLOT_TYPES } from "./image-slots"
+import { parseBirthdayParts } from "./birthday"
 
 const usernameRegex = /^[a-z0-9_-]+$/
 
@@ -50,7 +51,32 @@ export const profileIdentitySchema = z.object({
   birthdayMonth: z.string().optional(),
   birthdayYear: z.string().optional(),
   tags: z.string().optional(),
-  themeId: z.string().optional(),
+}).superRefine((data, ctx) => {
+  const parts = {
+    day: data.birthdayDay ?? "",
+    month: data.birthdayMonth ?? "",
+    year: data.birthdayYear ?? "",
+  }
+  const filled = [parts.day, parts.month, parts.year].filter((v) => v.trim() !== "")
+
+  // All empty = no birthday, which is allowed.
+  if (filled.length === 0) return
+  // All three must be present.
+  if (filled.length < 3) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Fill in the day, month, and year — or clear all three.",
+      path: ["birthdayDay"],
+    })
+    return
+  }
+  if (parseBirthdayParts(parts.day, parts.month, parts.year) === null) {
+    ctx.addIssue({
+      code: "custom",
+      message: "That date doesn't exist.",
+      path: ["birthdayDay"],
+    })
+  }
 })
 
 export const socialLinksSchema = z.object({

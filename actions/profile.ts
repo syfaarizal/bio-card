@@ -5,6 +5,8 @@ import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { profileIdentitySchema, socialLinksSchema, musicSchema, imageFocusSchema } from "@/lib/validations"
 import { fetchSpotifyOEmbed } from "@/lib/spotify"
 import { isReservedSlug } from "@/lib/reserved-slugs"
+import { parseBirthdayParts } from "@/lib/birthday"
+import { THEMES } from "@/types"
 import { revalidatePath } from "next/cache"
 import type { ProfileIdentityInput, SocialLinksInput, MusicInput, ImageFocusInput } from "@/lib/validations"
 import type { ImageSlotType } from "@/lib/image-slots"
@@ -25,7 +27,7 @@ export async function saveProfileIdentity(input: ProfileIdentityInput) {
   }
 
   const userId = await getCurrentUserId()
-  const { displayName, slug, bio, location, birthdayDay, birthdayMonth, birthdayYear, tags, themeId } =
+  const { displayName, slug, bio, location, birthdayDay, birthdayMonth, birthdayYear, tags } =
     parsed.data
 
   const existing = await prisma.profile.findFirst({
@@ -34,11 +36,10 @@ export async function saveProfileIdentity(input: ProfileIdentityInput) {
   if (existing) return { error: "This URL is already taken. Try another." }
   if (isReservedSlug(slug)) return { error: "This URL is reserved and can't be used." }
 
-  let birthday: Date | undefined
-  if (birthdayDay && birthdayMonth && birthdayYear) {
-    const date = new Date(`${birthdayYear}-${birthdayMonth}-${birthdayDay}`)
-    if (!isNaN(date.getTime())) birthday = date
-  }
+  // Three empty fields means "no birthday"; anything less is rejected by the
+  // schema. The date is assembled as UTC midnight so the card's
+  // `getUTCDate()` reads the same day the user typed.
+  const birthday = parseBirthdayParts(birthdayDay ?? "", birthdayMonth ?? "", birthdayYear ?? "")
 
   const tagsArray = tags
     ? tags
@@ -50,7 +51,27 @@ export async function saveProfileIdentity(input: ProfileIdentityInput) {
 
   await prisma.profile.update({
     where: { userId },
-    data: { displayName, slug, bio, location, birthday, tags: tagsArray, themeId },
+    data: { displayName, slug, bio, location, birthday, tags: tagsArray },
+  })
+
+  revalidatePath("/dashboard/profile")
+  return { success: true }
+}
+
+/**
+ * The theme is saved on its own. Saving it through the identity action would
+ * write the whole identity payload, which meant an unrelated field could be
+ * wiped by a theme change.
+ */
+export async function saveProfileTheme(themeId: string) {
+  if (!THEMES.some((theme) => theme.id === themeId)) {
+    return { error: "Unknown theme." }
+  }
+
+  const userId = await getCurrentUserId()
+  await prisma.profile.update({
+    where: { userId },
+    data: { themeId },
   })
 
   revalidatePath("/dashboard/profile")

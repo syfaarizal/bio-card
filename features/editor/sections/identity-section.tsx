@@ -1,14 +1,14 @@
 "use client"
 
+import { useEffect } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { profileIdentitySchema, type ProfileIdentityInput } from "@/lib/validations"
 import { saveProfileIdentity } from "@/actions/profile"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { SaveStatus } from "@/components/shared/save-status"
+import { parseBirthdayParts, MONTH_NAMES } from "@/lib/birthday"
 import type { FullProfile } from "@/types"
-
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
 interface Props {
   profile: FullProfile
@@ -20,6 +20,10 @@ export function IdentitySection({ profile, onUpdate }: Props) {
 
   const { register, control, formState: { errors } } = useForm<ProfileIdentityInput>({
     resolver: zodResolver(profileIdentitySchema),
+    // There is no submit button — the form saves itself. Validating on submit
+    // only would mean the field errors never render, so the birthday rules
+    // would fail silently.
+    mode: "onChange",
     defaultValues: {
       displayName: profile.displayName ?? "",
       slug: profile.slug,
@@ -29,25 +33,46 @@ export function IdentitySection({ profile, onUpdate }: Props) {
       birthdayMonth: birthday ? String(birthday.getUTCMonth() + 1) : "",
       birthdayYear: birthday ? String(birthday.getUTCFullYear()) : "",
       tags: profile.tags.join(", "),
-      themeId: profile.themeId,
     },
   })
 
   const formData = useWatch<ProfileIdentityInput>({ control }) as ProfileIdentityInput
 
-  // Sync preview on every keystroke
-  const handleChange = () => {
+  /**
+   * Push the form state into the live preview.
+   *
+   * This reads `useWatch`'s value, which is one render behind the keystroke
+   * that triggered it — so calling it straight from `onChange` made the
+   * preview lag by one character (typing "Dimas" showed "Dima"). Instead the
+   * preview is driven from a `useEffect` on the watched values, which always
+   * sees the committed state.
+   */
+  useEffect(() => {
+    const parsed = parseBirthdayParts(
+      formData.birthdayDay ?? "",
+      formData.birthdayMonth ?? "",
+      formData.birthdayYear ?? "",
+    )
+
     onUpdate({
       displayName: formData.displayName ?? null,
       slug: formData.slug,
       bio: formData.bio ?? null,
       location: formData.location ?? null,
+      birthday: parsed,
       tags: formData.tags ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
     })
-  }
+    // `onUpdate` is a stable setState wrapper in the editor; re-running on
+    // every parent render would loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.displayName, formData.slug, formData.bio, formData.location, formData.tags, formData.birthdayDay, formData.birthdayMonth, formData.birthdayYear])
 
   const { status } = useAutoSave({
     data: formData,
+    // Don't push an invalid form to the server — the field error already
+    // explains what is wrong, and a rejected save would add a second,
+    // more confusing "Failed to save" next to it.
+    enabled: Object.keys(errors).length === 0,
     onSave: async (data) => {
       const result = await saveProfileIdentity(data)
       if (result.error) throw new Error(result.error)
@@ -75,7 +100,6 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Display Name</label>
         <input
           {...register("displayName")}
-          onChange={(e) => { register("displayName").onChange(e); handleChange() }}
           placeholder="Your Name"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
@@ -88,7 +112,6 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         </label>
         <input
           {...register("slug")}
-          onChange={(e) => { register("slug").onChange(e); handleChange() }}
           placeholder="yourname"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
@@ -99,7 +122,6 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Bio / Role</label>
         <input
           {...register("bio")}
-          onChange={(e) => { register("bio").onChange(e); handleChange() }}
           placeholder="Describe yourself in a few words"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
@@ -110,7 +132,6 @@ export function IdentitySection({ profile, onUpdate }: Props) {
         <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Location</label>
         <input
           {...register("location")}
-          onChange={(e) => { register("location").onChange(e); handleChange() }}
           placeholder="Your City, Country"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />
@@ -122,6 +143,7 @@ export function IdentitySection({ profile, onUpdate }: Props) {
           <input
             {...register("birthdayDay")}
             placeholder="Day"
+            inputMode="numeric"
             className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           />
           <select
@@ -129,23 +151,24 @@ export function IdentitySection({ profile, onUpdate }: Props) {
             className="rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           >
             <option value="">Month</option>
-            {MONTHS.map((m, i) => (
+            {MONTH_NAMES.map((m, i) => (
               <option key={m} value={String(i + 1)}>{m}</option>
             ))}
           </select>
           <input
             {...register("birthdayYear")}
             placeholder="Year"
+            inputMode="numeric"
             className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
           />
         </div>
+        {errors.birthdayDay && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.birthdayDay.message}</p>}
       </div>
 
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1 dark:text-zinc-400">Tags</label>
         <input
           {...register("tags")}
-          onChange={(e) => { register("tags").onChange(e); handleChange() }}
           placeholder="Tags separated by commas"
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300 dark:focus:ring-zinc-300"
         />

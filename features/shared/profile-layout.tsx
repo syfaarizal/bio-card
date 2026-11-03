@@ -4,6 +4,7 @@ import { FocusedImage } from "@/components/shared/focused-image"
 import type { FullProfile, ProfileLink } from "@/types"
 import { THEMES } from "@/types"
 import { getActiveSinceYear } from "@/lib/utils"
+import { birthdayPartsFrom, MONTH_NAMES } from "@/lib/birthday"
 import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar-decoration"
 import { BrandIcon } from "@/components/shared/brand-icon"
 import { GalleryLightbox } from "@/features/shared/gallery-lightbox"
@@ -36,6 +37,7 @@ export function ProfileLayout({ profile }: Props) {
     .sort((a: ProfileLink, b: ProfileLink) => a.sortOrder - b.sortOrder)
   const activeSince = getActiveSinceYear(profile.createdAt)
   const decoration = (profile.profileEffect ?? "none") as DecorationId
+  const birthday = profile.birthday ? birthdayPartsFrom(profile.birthday) : null
 
   return (
     <div data-theme={themeId} className="flex min-h-dvh w-full bg-[var(--theme-page)]">
@@ -145,17 +147,16 @@ export function ProfileLayout({ profile }: Props) {
 
             {/* ── Stats ── */}
             <div className="grid grid-cols-2 gap-3 px-4">
-              {profile.birthday && (
+              {birthday && (
                 <div className="flex items-center justify-between rounded-xl border border-[var(--theme-border)] bg-[var(--theme-soft)] p-3">
                   <div>
                     <p className="flex items-center gap-1 text-[9px] uppercase text-[var(--theme-muted)]">
                       <CalendarDays className="h-3 w-3" />
                       Birthday
                     </p>
-                    <p className="mt-1 text-sm font-bold">{new Date(profile.birthday).getUTCDate()}</p>
+                    <p className="mt-1 text-sm font-bold">{birthday.day}</p>
                     <p className="text-[9px] text-[var(--theme-muted)]">
-                      {new Date(profile.birthday).toLocaleString("en-US", { month: "long", timeZone: "UTC" })}{" "}
-                      {new Date(profile.birthday).getUTCFullYear()}
+                      {MONTH_NAMES[Number(birthday.month) - 1]} {birthday.year}
                     </p>
                   </div>
                   <span className="text-lg text-[var(--theme-accent)]">✦</span>

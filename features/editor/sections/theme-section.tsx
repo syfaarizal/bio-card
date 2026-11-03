@@ -1,7 +1,7 @@
 "use client"
 
 import { THEMES } from "@/types"
-import { saveProfileIdentity } from "@/actions/profile"
+import { saveProfileTheme } from "@/actions/profile"
 import { cn } from "@/lib/utils"
 import type { FullProfile } from "@/types"
 
@@ -29,17 +29,7 @@ interface Props {
 export function ThemeSection({ profile, onUpdate }: Props) {
   const handleThemeChange = async (themeId: string) => {
     onUpdate({ themeId })
-    await saveProfileIdentity({
-      displayName: profile.displayName ?? "",
-      slug: profile.slug,
-      bio: profile.bio ?? "",
-      location: profile.location ?? "",
-      birthdayDay: "",
-      birthdayMonth: "",
-      birthdayYear: "",
-      tags: profile.tags.join(", "),
-      themeId,
-    })
+    await saveProfileTheme(themeId)
   }
 
   return (
