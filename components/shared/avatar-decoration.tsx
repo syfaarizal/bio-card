@@ -17,7 +17,7 @@ export const DECORATIONS: Decoration[] = [
   { id: "none", name: "None", description: "No decoration", preview: "○" },
   { id: "sakura", name: "Sakura", description: "Cherry blossom petals", preview: "🌸" },
   { id: "cyber", name: "Cyber Ring", description: "Neon glowing ring", preview: "⭕" },
-  { id: "angel", name: "Angel", description: "Golden halo & wings", preview: "👼" },
+  { id: "angel", name: "Angel", description: "Crimson halo ring", preview: "👼" },
 ]
 
 // ── SVG Overlays — rendered on top of the avatar ─────────────────────────────
@@ -140,8 +140,9 @@ export function DecorationOverlay({ id, size = 120 }: { id: DecorationId; size?:
       </svg>
     ),
 
-    // ── ANGEL ─────────────────────────────────────────────────────────────────
-    // Golden halo above + white feathered wings on sides
+    // ── ANGEL ─────────────────────────────────────────────────────────────
+    // Crimson halo ring: solid (not dashed, unlike cyber) with feather tips
+    // radiating outward at the diagonals and a light arc along the upper rim.
     angel: (
       <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
@@ -150,54 +151,47 @@ export function DecorationOverlay({ id, size = 120 }: { id: DecorationId; size?:
             <feGaussianBlur stdDeviation="2" result="blur"/>
             <feComposite in="SourceGraphic" in2="blur" operator="over"/>
           </filter>
-          <filter id="haloGlow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
+          <filter id="angelGlowStrong" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
             <feComposite in="SourceGraphic" in2="blur" operator="over"/>
           </filter>
-          <linearGradient id="haloGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#FDE68A"/>
-            <stop offset="50%" stopColor="#F59E0B"/>
-            <stop offset="100%" stopColor="#FDE68A"/>
+          <linearGradient id="angelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FDA4AF"/>
+            <stop offset="50%" stopColor="#E11D48"/>
+            <stop offset="100%" stopColor="#BE123C"/>
           </linearGradient>
-          <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95"/>
-            <stop offset="100%" stopColor="#E8E8FF" stopOpacity="0.7"/>
+          <linearGradient id="angelFeather" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stopColor="#E11D48"/>
+            <stop offset="100%" stopColor="#FECDD3"/>
           </linearGradient>
         </defs>
 
-        {/* ── Left wing ── */}
-        <g transform="translate(4, 42)" opacity="0.95">
-          {/* Main feather shape */}
-          <path d="M28,30 Q8,22 2,8 Q12,14 20,10 Q10,20 28,30Z" fill="url(#wingGrad)" filter="url(#angelGlow)"/>
-          <path d="M28,30 Q6,26 4,14 Q14,18 20,14 Q12,22 28,30Z" fill="white" opacity="0.8" filter="url(#angelGlow)"/>
-          <path d="M28,30 Q10,30 8,20 Q16,22 22,20 Q16,26 28,30Z" fill="white" opacity="0.7" filter="url(#angelGlow)"/>
-          {/* Feather quill lines */}
-          <line x1="28" y1="30" x2="12" y2="10" stroke="white" strokeWidth="0.5" opacity="0.5"/>
-          <line x1="28" y1="30" x2="8" y2="16" stroke="white" strokeWidth="0.5" opacity="0.5"/>
-          <line x1="28" y1="30" x2="10" y2="22" stroke="white" strokeWidth="0.5" opacity="0.5"/>
-        </g>
-
-        {/* ── Right wing ── */}
-        <g transform="translate(92, 42) scale(-1,1)" opacity="0.95">
-          <path d="M28,30 Q8,22 2,8 Q12,14 20,10 Q10,20 28,30Z" fill="url(#wingGrad)" filter="url(#angelGlow)"/>
-          <path d="M28,30 Q6,26 4,14 Q14,18 20,14 Q12,22 28,30Z" fill="white" opacity="0.8" filter="url(#angelGlow)"/>
-          <path d="M28,30 Q10,30 8,20 Q16,22 22,20 Q16,26 28,30Z" fill="white" opacity="0.7" filter="url(#angelGlow)"/>
-          <line x1="28" y1="30" x2="12" y2="10" stroke="white" strokeWidth="0.5" opacity="0.5"/>
-          <line x1="28" y1="30" x2="8" y2="16" stroke="white" strokeWidth="0.5" opacity="0.5"/>
-          <line x1="28" y1="30" x2="10" y2="22" stroke="white" strokeWidth="0.5" opacity="0.5"/>
-        </g>
-
-        {/* ── Halo ── */}
         {/* Outer glow */}
-        <ellipse cx="60" cy="14" rx="22" ry="7" stroke="#F59E0B" strokeWidth="1" opacity="0.4" filter="url(#haloGlow)"/>
-        {/* Main halo ring */}
-        <ellipse cx="60" cy="14" rx="19" ry="5.5" stroke="url(#haloGrad)" strokeWidth="3.5" filter="url(#angelGlow)" opacity="0.98"/>
-        {/* Inner highlight */}
-        <ellipse cx="60" cy="13" rx="16" ry="3.5" stroke="#FDE68A" strokeWidth="1" opacity="0.5"/>
-        {/* Sparkle dots on halo */}
-        <circle cx="41" cy="14" r="1.5" fill="#FDE68A" filter="url(#haloGlow)" opacity="0.9"/>
-        <circle cx="79" cy="14" r="1.5" fill="#FDE68A" filter="url(#haloGlow)" opacity="0.9"/>
-        <circle cx="60" cy="8.5" r="1.2" fill="#FFF8DC" filter="url(#haloGlow)" opacity="0.8"/>
+        <circle cx="60" cy="60" r="54" stroke="url(#angelGrad)" strokeWidth="1.5" opacity="0.4" filter="url(#angelGlowStrong)"/>
+        {/* Main solid ring */}
+        <circle cx="60" cy="60" r="49" stroke="url(#angelGrad)" strokeWidth="2.5" filter="url(#angelGlow)"/>
+        {/* Inner hairline ring */}
+        <circle cx="60" cy="60" r="42" stroke="#FDA4AF" strokeWidth="0.8" opacity="0.55"/>
+
+        {/* Light arc along the upper rim */}
+        <path d="M39 24 A49 49 0 0 1 87 27" stroke="#FECDD3" strokeWidth="2" strokeLinecap="round" opacity="0.8" filter="url(#angelGlow)"/>
+
+        {/* Feather tips radiating outward at the diagonals */}
+        {[45, 135, 225, 315].map((angle) => (
+          <g key={angle} transform={`rotate(${angle} 60 60) translate(0 -49)`}>
+            <path d="M0,2 C-4,-2 -4,-6 0,-9 C4,-6 4,-2 0,2 Z"
+              fill="url(#angelFeather)" filter="url(#angelGlow)"/>
+            <line x1="0" y1="1" x2="0" y2="-7" stroke="#FFF1F2" strokeWidth="0.7" opacity="0.7"/>
+          </g>
+        ))}
+
+        {/* Sparkle dots on the cardinal points */}
+        <g fill="#FECDD3" filter="url(#angelGlow)">
+          <circle cx="60" cy="11" r="1.8" opacity="0.9"/>
+          <circle cx="60" cy="109" r="1.8" opacity="0.9"/>
+          <circle cx="11" cy="60" r="1.8" opacity="0.9"/>
+          <circle cx="109" cy="60" r="1.8" opacity="0.9"/>
+        </g>
       </svg>
     ),
   }

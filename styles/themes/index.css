@@ -66,6 +66,32 @@
   --theme-ring: #22d3ee;
 }
 
+/* ─── CYBER RED ─── */
+[data-theme="cyber-red"] {
+  --theme-page: #0a0304;
+  --theme-panel: #120608;
+  --theme-soft: #1c0b0e;
+  --theme-border: #351217;
+  --theme-text: #f5f3f4;
+  --theme-muted: #a98d92;
+  --theme-accent: #ef4444;
+  --theme-banner: linear-gradient(to right, #450a0a, #7f1d1d, #1c0405);
+  --theme-ring: #dc2626;
+}
+
+/* ─── SOFT GREEN ─── */
+[data-theme="soft-green"] {
+  --theme-page: #eff8f1;
+  --theme-panel: #ffffff;
+  --theme-soft: #f2faf4;
+  --theme-border: #d8ecdf;
+  --theme-text: #14301d;
+  --theme-muted: #6b8f78;
+  --theme-accent: #16a34a;
+  --theme-banner: linear-gradient(to right, #14532d, #166534, #052e16);
+  --theme-ring: #22c55e;
+}
+
 /* ─── GLASS ─── */
 [data-theme="glass"] {
   --theme-page: #f5f3ff;

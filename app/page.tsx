@@ -33,8 +33,8 @@ export default async function LandingPage() {
     },
     {
       icon: Palette,
-      title: "5 Beautiful Themes",
-      desc: "White, Midnight, Rose, Cyber, Glass. Pick one and look great immediately.",
+      title: "7 Beautiful Themes",
+      desc: "White, Midnight, Rose, Cyber, Cyber Red, Soft Green, Glass. Pick one and look great immediately.",
     },
     {
       icon: Link2,

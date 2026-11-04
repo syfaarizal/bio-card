@@ -10,6 +10,8 @@ const THEME_COLORS: Record<string, string> = {
   midnight: "#0d0f16",
   rose: "#ffffff",
   cyber: "#080e19",
+  "cyber-red": "#120608",
+  "soft-green": "#ffffff",
   glass: "#f5f3ff",
 }
 
@@ -18,6 +20,8 @@ const THEME_DOT_COLORS: Record<string, string> = {
   midnight: "#818cf8",
   rose: "#e11d48",
   cyber: "#22d3ee",
+  "cyber-red": "#ef4444",
+  "soft-green": "#16a34a",
   glass: "#7c3aed",
 }
 

@@ -36,6 +36,8 @@ export const THEMES: ThemeConfig[] = [
   { id: "midnight", version: 1, name: "Midnight", label: "Dark & Elegant" },
   { id: "rose", version: 1, name: "Rose", label: "Warm & Soft" },
   { id: "cyber", version: 1, name: "Cyber", label: "Neon & Techy" },
+  { id: "cyber-red", version: 1, name: "Cyber Red", label: "Black & Red" },
+  { id: "soft-green", version: 1, name: "Soft Green", label: "Calm & Fresh" },
   { id: "glass", version: 1, name: "Glass", label: "Glassmorphism" },
 ]
 
