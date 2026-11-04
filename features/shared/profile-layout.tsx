@@ -70,7 +70,9 @@ export function ProfileLayout({ profile }: Props) {
             style={{ backdropFilter: "blur(var(--theme-panel-blur))" }}
           >
             <div className="flex flex-col items-center gap-3 px-4 pt-4">
-              <div className="relative h-[76px] w-[76px] shrink-0 rounded-full p-[2px] shadow-md @sm:h-[88px] @sm:w-[88px]" style={{ background: "var(--theme-ring)" }}>
+              {/* The decoration *is* the avatar border — Discord-style — so the
+                  avatar fills its box and the overlay ring is drawn on the rim. */}
+              <div className="relative h-[76px] w-[76px] shrink-0 rounded-full shadow-md @sm:h-[88px] @sm:w-[88px]">
                 <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-700">
                   {avatar ? (
                     <FocusedImage
@@ -87,8 +89,8 @@ export function ProfileLayout({ profile }: Props) {
                     </div>
                   )}
                 </div>
-                <DecorationOverlay id={decoration} size={88} />
-                <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
+                <DecorationOverlay id={decoration} />
+                <span className="absolute -bottom-1.5 -right-1.5 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
               </div>
 
               <div className="w-full min-w-0 text-center">

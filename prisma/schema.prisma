@@ -30,7 +30,7 @@ model Profile {
   tags           String[]
   themeId        String        @default("default")
   themeVersion   Int           @default(1)
-  profileEffect  String?       // null | "sakura" | "cyber" | "angel"
+  profileEffect  String?       // null | "sakura" | "cyber" | "angel" | "ember" | "moon"
   verifiedBadge  Boolean       @default(false) // pro-only placeholder
   status         ProfileStatus @default(DRAFT)
   createdAt      DateTime      @default(now())
