@@ -204,7 +204,17 @@ export function ProfileLayout({ profile }: Props) {
               </div>
             </section>
 
-            <p className="py-4 text-center text-[9px] text-[var(--theme-muted)]">Made with BioCard</p>
+            <p className="py-4 text-center text-[9px] text-[var(--theme-muted)]">
+              Made with{" "}
+              <a
+                href="https://biocard-pro.vercel.app/"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline"
+              >
+                BioCard
+              </a>
+            </p>
           </div>
         </article>
       </div>
