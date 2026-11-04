@@ -18,11 +18,11 @@ const THEME_COLORS: Record<string, string> = {
 const THEME_DOT_COLORS: Record<string, string> = {
   default: "#111827",
   midnight: "#818cf8",
-  rose: "#e11d48",
+  rose: "#be123c",
   cyber: "#22d3ee",
   "cyber-red": "#ef4444",
-  "soft-green": "#16a34a",
-  glass: "#7c3aed",
+  "soft-green": "#12672f",
+  glass: "#6d28d9",
 }
 
 interface Props {

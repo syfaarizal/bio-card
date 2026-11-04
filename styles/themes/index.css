@@ -47,8 +47,8 @@
   --theme-soft: #fff1f2;
   --theme-border: #fecdd3;
   --theme-text: #111827;
-  --theme-muted: #f43f5e;
-  --theme-accent: #e11d48;
+  --theme-muted: #7f4a56;
+  --theme-accent: #be123c;
   --theme-banner: linear-gradient(to right, #4c0519, #881337, #500724);
   --theme-ring: #f43f5e;
 }
@@ -86,8 +86,8 @@
   --theme-soft: #f2faf4;
   --theme-border: #d8ecdf;
   --theme-text: #14301d;
-  --theme-muted: #6b8f78;
-  --theme-accent: #16a34a;
+  --theme-muted: #456152;
+  --theme-accent: #12672f;
   --theme-banner: linear-gradient(to right, #14532d, #166534, #052e16);
   --theme-ring: #22c55e;
 }
@@ -99,8 +99,8 @@
   --theme-soft: rgb(245 243 255 / 0.7);
   --theme-border: #ddd6fe;
   --theme-text: #4c1d95;
-  --theme-muted: #8b5cf6;
-  --theme-accent: #7c3aed;
+  --theme-muted: #6d28d9;
+  --theme-accent: #6d28d9;
   --theme-banner: linear-gradient(to right, #2e1065, #312e81, #581c87);
   --theme-ring: #7c3aed;
   /* The frosted-glass character of this theme comes from blurring whatever

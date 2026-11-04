@@ -45,7 +45,7 @@ export function ProfileLayout({ profile }: Props) {
           is taller than the viewport, so the top of the card never becomes
           unreachable. */}
       <div className="mx-auto my-auto w-full max-w-md px-3 py-4">
-        <article className="@container flex flex-col overflow-hidden rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-panel)] shadow-sm">
+        <article className="@container flex flex-col overflow-hidden rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-panel)] text-[var(--theme-text)] shadow-sm">
           {/* ── Banner ── */}
           <div className="relative h-28 overflow-hidden @sm:h-36">
             {banner ? (
