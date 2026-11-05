@@ -18,23 +18,10 @@ export const DECORATIONS: Decoration[] = [
   { id: "none", name: "Plain", description: "Simple round border", preview: "○" },
   { id: "sakura", name: "Sakura", description: "Cherry blossom ring", preview: "🌸" },
   { id: "cyber", name: "Cyber Ring", description: "Neon glowing ring", preview: "⭕" },
-  { id: "angel", name: "Angel", description: "Crimson halo ring", preview: "👼" },
+  { id: "angel", name: "Red Angel", description: "Crimson halo ring", preview: "👼" },
   { id: "ember", name: "Ember", description: "Animated crimson ring", preview: "🔥" },
   { id: "moon", name: "Moon", description: "Pink crescent moon", preview: "🌙" },
 ]
-
-// ── SVG Overlays — rendered on top of the avatar ─────────────────────────────
-// Every overlay uses the same 120×120 viewBox and is stretched over the whole
-// avatar box, so the avatar's outer edge is always the circle of radius 60.
-// The decoration *replaces* the avatar border, which means its ring is drawn
-// centred on radius 57 — a couple of units inside the edge so the stroke
-// still sits on the visible rim instead of falling off the box.
-//
-// `overflow: visible` lets a decoration (angel feathers, the crescent moon)
-// reach past the avatar box, the way Discord's do.
-//
-// The avatar photo's radius lives in lib/avatar-ring.ts, which knows where
-// each decoration's band starts.
 
 const RING_R = 57
 const RING_W = 5
@@ -197,8 +184,6 @@ export function DecorationOverlay({ id }: { id: DecorationId }) {
     ),
 
     // ── ANGEL ─────────────────────────────────────────────────────────────────
-    // Crimson halo ring: solid (not dashed, unlike cyber) with feather tips
-    // radiating outward at the diagonals and a light arc along the upper rim.
     angel: (
       <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={SVG_STYLE}>
         <defs>
@@ -270,8 +255,6 @@ export function DecorationOverlay({ id }: { id: DecorationId }) {
     ),
 
     // ── EMBER ────────────────────────────────────────────────────────────────
-    // Animated crimson ring in the cyber-red & black palette: a pulsing
-    // gradient band with flowing dashes and sparks running around the rim.
     ember: (
       <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={SVG_STYLE}>
         <defs>
