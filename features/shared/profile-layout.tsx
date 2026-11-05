@@ -220,15 +220,16 @@ export function ProfileLayout({ profile }: Props) {
               </div>
             </section>
 
-            <p className="py-4 text-center text-[9px] text-[var(--theme-muted)]">
-              Made with{" "}
+            <p className="flex items-center justify-center gap-1 py-4 text-center text-[9px] text-[var(--theme-muted)]">
+              <span>Made with</span>
               <a
                 href="https://biocard-pro.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:underline"
+                className="inline-flex items-center gap-1 hover:underline"
               >
-                <span className="inline-flex items-center gap-1"><BrandLogo className="h-4 w-4 rounded-full" />BioCard</span>
+                <BrandLogo className="block h-4 w-4 rounded-full" />
+                <span>BioCard</span>
               </a>
             </p>
           </div>
