@@ -1,10 +1,11 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { avatarPhotoSize, type DecorationId } from "@/lib/avatar-ring"
 
 // ── Decoration definitions ────────────────────────────────────────────────────
 
-export type DecorationId = "none" | "sakura" | "cyber" | "angel" | "ember" | "moon"
+export type { DecorationId }
 
 export interface Decoration {
   id: DecorationId
@@ -31,6 +32,9 @@ export const DECORATIONS: Decoration[] = [
 //
 // `overflow: visible` lets a decoration (angel feathers, the crescent moon)
 // reach past the avatar box, the way Discord's do.
+//
+// The avatar photo's radius lives in lib/avatar-ring.ts, which knows where
+// each decoration's band starts.
 
 const RING_R = 57
 const RING_W = 5
@@ -418,8 +422,12 @@ export function AvatarDecorationPicker({ current, onSelect }: DecorPickerProps) 
           >
             {/* Mini avatar preview with decoration */}
             <div className="relative w-16 h-16 flex-shrink-0">
-              {/* Avatar placeholder */}
-              <div className="w-full h-full rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center overflow-hidden">
+              {/* Avatar placeholder — inset like the real avatar so the
+                  decoration's band frames it instead of covering it. */}
+              <div
+                className="absolute inset-0 m-auto rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center overflow-hidden"
+                style={{ width: `${avatarPhotoSize(d.id)}%`, height: `${avatarPhotoSize(d.id)}%` }}
+              >
                 <span className="text-2xl opacity-40">👤</span>
               </div>
               {/* Decoration overlay */}

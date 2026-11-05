@@ -6,6 +6,7 @@ import { THEMES } from "@/types"
 import { getActiveSinceYear } from "@/lib/utils"
 import { birthdayPartsFrom, MONTH_NAMES } from "@/lib/birthday"
 import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar-decoration"
+import { avatarPhotoSize } from "@/lib/avatar-ring"
 import { BrandIcon } from "@/components/shared/brand-icon"
 import { GalleryLightbox } from "@/features/shared/gallery-lightbox"
 
@@ -70,10 +71,14 @@ export function ProfileLayout({ profile }: Props) {
             style={{ backdropFilter: "blur(var(--theme-panel-blur))" }}
           >
             <div className="flex flex-col items-center gap-3 px-4 pt-4">
-              {/* The decoration *is* the avatar border — Discord-style — so the
-                  avatar fills its box and the overlay ring is drawn on the rim. */}
+              {/* The decoration *is* the avatar border — Discord-style. The photo
+                  is inset so it ends exactly where the decoration's band
+                  starts, so the band frames the image instead of being a stroke
+                  drawn over it. */}
               <div className="relative h-[76px] w-[76px] shrink-0 rounded-full shadow-md @sm:h-[88px] @sm:w-[88px]">
-                <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-700">
+                <div className="absolute inset-0 m-auto overflow-hidden rounded-full bg-slate-700"
+                  style={{ width: `${avatarPhotoSize(decoration)}%`, height: `${avatarPhotoSize(decoration)}%` }}
+                >
                   {avatar ? (
                     <FocusedImage
                       src={avatar.url}

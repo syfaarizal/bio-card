@@ -24,7 +24,7 @@
   --theme-muted: #6b7280;
   --theme-accent: #111827;
   --theme-banner: linear-gradient(to right, #1f2937, #374151, #111827);
-  --theme-ring: #1f2937;
+  --theme-ring: #4b5563;
 }
 
 /* ─── MIDNIGHT ─── */
@@ -37,7 +37,7 @@
   --theme-muted: #94a3b8;
   --theme-accent: #818cf8;
   --theme-banner: linear-gradient(to right, #1e1b4b, #0f172a, #2e1065);
-  --theme-ring: #6366f1;
+  --theme-ring: #818cf8;
 }
 
 /* ─── ROSE ─── */
@@ -50,7 +50,7 @@
   --theme-muted: #7f4a56;
   --theme-accent: #be123c;
   --theme-banner: linear-gradient(to right, #4c0519, #881337, #500724);
-  --theme-ring: #f43f5e;
+  --theme-ring: #fb7185;
 }
 
 /* ─── CYBER ─── */
@@ -89,7 +89,9 @@
   --theme-muted: #456152;
   --theme-accent: #12672f;
   --theme-banner: linear-gradient(to right, #14532d, #166534, #052e16);
-  --theme-ring: #22c55e;
+  /* Muted sage rather than the vivid emerald the accent uses — the ring
+     frames the photo, so it stays quiet. */
+  --theme-ring: #74c69d;
 }
 
 /* ─── GLASS ─── */
@@ -102,7 +104,7 @@
   --theme-muted: #6d28d9;
   --theme-accent: #6d28d9;
   --theme-banner: linear-gradient(to right, #2e1065, #312e81, #581c87);
-  --theme-ring: #7c3aed;
+  --theme-ring: #a78bfa;
   /* The frosted-glass character of this theme comes from blurring whatever
      sits behind the panel — only the glass theme asks for it. */
   --theme-panel-blur: 16px;
