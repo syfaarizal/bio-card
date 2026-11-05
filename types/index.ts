@@ -2,12 +2,9 @@
 import type { Prisma } from "@prisma/client"
 
 export type Profile = Prisma.ProfileGetPayload<object>
-export type SocialLinks = Prisma.SocialLinksGetPayload<object>
 export type Music = Prisma.MusicGetPayload<object>
 export type Image = Prisma.ImageGetPayload<object>
 export type User = Prisma.UserGetPayload<object>
-
-export { ProfileStatus, ImageType } from "@prisma/client"
 
 // Full profile with all relations
 export type FullProfile = Prisma.ProfileGetPayload<{
@@ -41,15 +38,6 @@ export const THEMES: ThemeConfig[] = [
   { id: "glass", version: 1, name: "Glass", label: "Glassmorphism" },
 ]
 
-// Analytics
-export interface AnalyticsSummary {
-  total: number
-  today: number
-  thisWeek: number
-  thisMonth: number
-  topReferrer: { source: string; count: number }[]
-}
-
 export type ReferrerSource = "Discord" | "Twitter" | "WhatsApp" | "Direct" | "Other"
 
 export function parseReferrer(referrer: string | null | undefined): ReferrerSource {
@@ -65,33 +53,4 @@ export interface SpotifyOEmbed {
   author_name: string
   thumbnail_url: string
   html: string
-}
-
-export interface ProfileFormData {
-  displayName: string
-  slug: string
-  bio: string
-  location: string
-  birthday: { day: string; month: string; year: string }
-  tags: string
-  themeId: string
-}
-
-// Deprecated: Use ProfileLink instead
-export interface SocialLinksFormData {
-  instagram: string
-  tiktok: string
-  twitter: string
-  youtube: string
-}
-
-// Link form data for dynamic links
-export interface LinkFormData {
-  title: string
-  url: string
-  provider?: string
-}
-
-export interface MusicFormData {
-  spotifyUrl: string
 }

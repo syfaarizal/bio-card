@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, type FormEvent } from "react"
-import { PROVIDERS, POPULAR_PROVIDERS, FALLBACK_ICONS, type ProviderId } from "@/lib/links/providers"
+import { PROVIDERS, POPULAR_PROVIDERS, type ProviderId } from "@/lib/links/providers"
 import { detectProvider, getDefaultLabel, normalizeUrl } from "@/lib/links/detect"
 import { createLink, updateLink, deleteLink, reorderLinks } from "@/actions/profile"
 import { BrandIcon } from "@/components/shared/brand-icon"

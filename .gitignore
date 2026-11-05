@@ -10,6 +10,9 @@ out/
 # Production build
 build/
 
+# TypeScript
+*.tsbuildinfo
+
 # Environment variables — NEVER commit these
 .env
 .env.local

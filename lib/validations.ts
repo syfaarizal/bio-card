@@ -27,16 +27,6 @@ export const forgotPasswordSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
 })
 
-export const resetPasswordSchema = z
-  .object({
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  })
-
 export const profileIdentitySchema = z.object({
   displayName: z.string().max(50, "Max 50 characters").optional(),
   slug: z
@@ -79,13 +69,6 @@ export const profileIdentitySchema = z.object({
   }
 })
 
-export const socialLinksSchema = z.object({
-  instagram: z.string().url("Enter a valid URL").or(z.literal("")).optional(),
-  tiktok: z.string().url("Enter a valid URL").or(z.literal("")).optional(),
-  twitter: z.string().url("Enter a valid URL").or(z.literal("")).optional(),
-  youtube: z.string().url("Enter a valid URL").or(z.literal("")).optional(),
-})
-
 export const musicSchema = z.object({
   spotifyUrl: z
     .string()
@@ -119,9 +102,7 @@ export const imageFocusSchema = z.object({
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
-export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>
 export type ProfileIdentityInput = z.infer<typeof profileIdentitySchema>
-export type SocialLinksInput = z.infer<typeof socialLinksSchema>
 export type MusicInput = z.infer<typeof musicSchema>
 export type LinkInput = z.infer<typeof linkSchema>
 export type ImageFocusInput = z.infer<typeof imageFocusSchema>

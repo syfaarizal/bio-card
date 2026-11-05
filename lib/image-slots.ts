@@ -65,7 +65,3 @@ export const IMAGE_SLOTS: ImageSlotMeta[] = [
     focusRange: [0, 100],
   },
 ]
-
-export function getImageSlot(type: string): ImageSlotMeta | undefined {
-  return IMAGE_SLOTS.find((slot) => slot.type === type)
-}

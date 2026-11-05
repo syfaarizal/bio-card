@@ -21,10 +21,6 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
     setLiveProfile((prev: FullProfile) => ({ ...prev, ...updates }))
   }
 
-  const updateLinks = (updates: { profileLinks?: typeof liveProfile.profileLinks }) => {
-    updatePreview(updates as Partial<FullProfile>)
-  }
-
   return (
     <div className="flex h-full min-w-0 flex-col gap-6 xl:flex-row">
       {/* ── Editor Panel ── */}

@@ -2,13 +2,13 @@
 
 import { prisma } from "@/lib/prisma"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
-import { profileIdentitySchema, socialLinksSchema, musicSchema, imageFocusSchema } from "@/lib/validations"
+import { profileIdentitySchema, musicSchema, imageFocusSchema } from "@/lib/validations"
 import { fetchSpotifyOEmbed } from "@/lib/spotify"
 import { isReservedSlug } from "@/lib/reserved-slugs"
 import { parseBirthdayParts } from "@/lib/birthday"
 import { THEMES } from "@/types"
 import { revalidatePath } from "next/cache"
-import type { ProfileIdentityInput, SocialLinksInput, MusicInput, ImageFocusInput } from "@/lib/validations"
+import type { ProfileIdentityInput, MusicInput, ImageFocusInput } from "@/lib/validations"
 import type { ImageSlotType } from "@/lib/image-slots"
 
 async function getCurrentUserId(): Promise<string> {
@@ -72,26 +72,6 @@ export async function saveProfileTheme(themeId: string) {
   await prisma.profile.update({
     where: { userId },
     data: { themeId },
-  })
-
-  revalidatePath("/dashboard/profile")
-  return { success: true }
-}
-
-export async function saveSocialLinks(input: SocialLinksInput) {
-  const parsed = socialLinksSchema.safeParse(input)
-  if (!parsed.success) {
-    return { error: parsed.error.issues[0].message }
-  }
-
-  const userId = await getCurrentUserId()
-  const profile = await prisma.profile.findUnique({ where: { userId } })
-  if (!profile) return { error: "Profile not found." }
-
-  await prisma.socialLinks.upsert({
-    where: { profileId: profile.id },
-    create: { profileId: profile.id, ...parsed.data },
-    update: parsed.data,
   })
 
   revalidatePath("/dashboard/profile")
@@ -220,16 +200,6 @@ export async function unpublishProfile() {
   })
   revalidatePath("/dashboard")
   return { success: true, status: "DRAFT" }
-}
-
-export async function archiveProfile() {
-  const userId = await getCurrentUserId()
-  await prisma.profile.update({
-    where: { userId },
-    data: { status: "ARCHIVED" as const },
-  })
-  revalidatePath("/dashboard")
-  return { success: true }
 }
 
 export async function deleteAccount(confirmUsername: string) {

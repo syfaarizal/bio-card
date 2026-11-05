@@ -33,14 +33,6 @@ export function normalizeFocus(
   }
 }
 
-export function isDefaultFocus(value: ImageFocusValues): boolean {
-  return (
-    value.focusX === DEFAULT_FOCUS_X &&
-    value.focusY === DEFAULT_FOCUS_Y &&
-    value.zoom === DEFAULT_ZOOM
-  )
-}
-
 export function buildObjectPosition(value: ImageFocusValues): string {
   return `${value.focusX}% ${value.focusY}%`
 }

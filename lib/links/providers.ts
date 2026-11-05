@@ -1,12 +1,3 @@
-import {
-  MessageCircle,
-  Globe,
-  ExternalLink,
-  Gamepad2,
-  Store,
-  type LucideIcon,
-} from "lucide-react"
-
 export type ProviderId =
   | "instagram"
   | "tiktok"
@@ -95,23 +86,6 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
     label: "Custom Link",
     patterns: [],
   },
-}
-
-// Fallback Lucide icons for when brand icons aren't available
-export const FALLBACK_ICONS: Record<ProviderId, LucideIcon> = {
-  instagram: MessageCircle,
-  tiktok: Globe,
-  x: ExternalLink,
-  youtube: Globe,
-  discord: MessageCircle,
-  github: Globe,
-  spotify: Globe,
-  twitch: Globe,
-  linkedin: Globe,
-  telegram: MessageCircle,
-  whatsapp: MessageCircle,
-  portfolio: Globe,
-  custom: ExternalLink,
 }
 
 export const POPULAR_PROVIDERS: ProviderId[] = [
