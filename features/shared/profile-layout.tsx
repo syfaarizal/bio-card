@@ -90,7 +90,7 @@ export function ProfileLayout({ profile }: Props) {
                   )}
                 </div>
                 <DecorationOverlay id={decoration} />
-                <span className="absolute -bottom-1.5 -right-1.5 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400" />
+                <span className="absolute left-[83.6%] top-[83.6%] h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[var(--theme-panel)] bg-emerald-400" />
               </div>
 
               <div className="w-full min-w-0 text-center">
