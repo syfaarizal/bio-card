@@ -9,6 +9,9 @@ import { DecorationOverlay, type DecorationId } from "@/components/shared/avatar
 import { avatarPhotoSize } from "@/lib/avatar-ring"
 import { BrandIcon } from "@/components/shared/brand-icon"
 import { GalleryLightbox } from "@/features/shared/gallery-lightbox"
+import { MoreLinksDialog } from "@/features/shared/more-links-dialog"
+import { zodiacFrom } from "@/lib/zodiac"
+import { ZodiacIcon } from "@/features/shared/zodiac-icon"
 
 interface Props {
   profile: FullProfile
@@ -39,6 +42,7 @@ export function ProfileLayout({ profile }: Props) {
   const activeSince = getActiveSinceYear(profile.createdAt)
   const decoration = (profile.profileEffect ?? "none") as DecorationId
   const birthday = profile.birthday ? birthdayPartsFrom(profile.birthday) : null
+  const zodiac = birthday ? zodiacFrom(Number(birthday.month), Number(birthday.day)) : null
 
   return (
     <div data-theme={themeId} className="flex min-h-dvh w-full bg-[var(--theme-page)]">
@@ -150,6 +154,10 @@ export function ProfileLayout({ profile }: Props) {
               </div>
             )}
 
+            <div className="px-4">
+              <MoreLinksDialog links={links.slice(6)} />
+            </div>
+
             <div className="mx-4 my-4 border-t border-[var(--theme-border)]" />
 
             {/* ── Stats ── */}
@@ -166,7 +174,7 @@ export function ProfileLayout({ profile }: Props) {
                       {MONTH_NAMES[Number(birthday.month) - 1]} {birthday.year}
                     </p>
                   </div>
-                  <span className="text-lg text-[var(--theme-accent)]">✦</span>
+                  {zodiac && <span role="img" title={zodiac.name} aria-label={zodiac.name}><ZodiacIcon name={zodiac.name} /></span>}
                 </div>
               )}
               <div className="flex items-center justify-between rounded-xl border border-[var(--theme-border)] bg-[var(--theme-soft)] p-3">
