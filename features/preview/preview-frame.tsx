@@ -21,6 +21,8 @@ export function PreviewFrame() {
   const [profile, setProfile] = useState<FullProfile | null>(null)
 
   useEffect(() => {
+    document.documentElement.dataset.previewFrame = "true"
+
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return
       const data = event.data
@@ -36,7 +38,10 @@ export function PreviewFrame() {
     window.addEventListener("message", onMessage)
     window.parent.postMessage({ type: PREVIEW_REQUEST_MESSAGE }, window.location.origin)
 
-    return () => window.removeEventListener("message", onMessage)
+    return () => {
+      window.removeEventListener("message", onMessage)
+      delete document.documentElement.dataset.previewFrame
+    }
   }, [])
 
   if (!profile) {

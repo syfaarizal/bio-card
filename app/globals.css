@@ -26,6 +26,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+html[data-preview-frame],
+html[data-preview-frame] body {
+  scrollbar-width: none;
+}
+
+html[data-preview-frame]::-webkit-scrollbar,
+html[data-preview-frame] body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 /* Dialog centering */
 dialog {
   margin: auto;
