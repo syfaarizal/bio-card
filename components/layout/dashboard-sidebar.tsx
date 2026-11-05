@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { logoutAction } from "@/actions/auth"
 import { User, Link2, Music, Image, BarChart2, Settings, LogOut, ChevronDown, Crown, Palette } from "lucide-react"
 import { useState } from "react"
+import { BrandLogo } from "@/components/shared/brand-logo"
 
 interface SidebarProps {
   username: string
@@ -38,9 +39,7 @@ export function DashboardSidebar({ username, profileStatus, slug }: SidebarProps
       {/* Logo */}
       <div className="flex h-14 items-center px-4 border-b border-gray-200 dark:border-zinc-800">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center dark:bg-white">
-            <span className="text-white text-xs font-bold dark:text-zinc-950">B</span>
-          </div>
+          <BrandLogo className="h-8 w-8 rounded-lg" />
           <span className="font-semibold text-gray-900 dark:text-zinc-50">BioCard</span>
         </Link>
       </div>

@@ -37,10 +37,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "BioCard",
+    images: [{ url: "/brand/biocard-logo.png", width: 640, height: 640, alt: "BioCard logo" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/brand/biocard-logo.png"],
   },
+  icons: { icon: "/icon.svg", apple: "/apple-icon.png" },
 }
 
 export default function RootLayout({

@@ -3,6 +3,7 @@ import { ArrowRight, Zap, Palette, Link2 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { LandingGallery } from "@/features/public/landing-gallery"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { BrandLogo } from "@/components/shared/brand-logo"
 
 export const revalidate = 3600 // ISR — revalidate gallery every hour
 
@@ -76,9 +77,7 @@ export default async function LandingPage() {
       {/* ── Nav ── */}
       <nav className="sticky top-0 z-50 flex items-center justify-between gap-3 px-4 py-4 border-b border-gray-100 bg-white/90 backdrop-blur-sm transition-colors dark:border-zinc-800 dark:bg-zinc-950/90 sm:px-6">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center dark:bg-white">
-            <span className="text-white text-xs font-bold dark:text-zinc-950">B</span>
-          </div>
+          <BrandLogo className="h-8 w-8 rounded-lg" />
           <span className="font-semibold text-gray-900 dark:text-zinc-50">BioCard</span>
         </div>
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
@@ -207,9 +206,7 @@ export default async function LandingPage() {
       <footer className="border-t border-gray-800 bg-gray-900 py-6 px-4 dark:border-zinc-800 sm:px-6">
         <div className="max-w-4xl mx-auto flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-white/10 flex items-center justify-center">
-              <span className="text-white text-[10px] font-bold">B</span>
-            </div>
+            <BrandLogo className="h-6 w-6 rounded-md" />
             <span className="text-sm text-gray-500">BioCard</span>
           </div>
           <p className="text-xs text-gray-600">© 2026 BioCard. All rights reserved.</p>

@@ -12,6 +12,7 @@ import { GalleryLightbox } from "@/features/shared/gallery-lightbox"
 import { MoreLinksDialog } from "@/features/shared/more-links-dialog"
 import { zodiacFrom } from "@/lib/zodiac"
 import { ZodiacIcon } from "@/features/shared/zodiac-icon"
+import { BrandLogo } from "@/components/shared/brand-logo"
 
 interface Props {
   profile: FullProfile
@@ -227,7 +228,7 @@ export function ProfileLayout({ profile }: Props) {
                 rel="noreferrer"
                 className="hover:underline"
               >
-                BioCard
+                <span className="inline-flex items-center gap-1"><BrandLogo className="h-4 w-4 rounded-full" />BioCard</span>
               </a>
             </p>
           </div>
